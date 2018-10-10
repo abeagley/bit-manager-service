@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The GraphQL service for accessing and modifying bit repository information.",
   "main": "src/index.ts",
-  "repository": "https://github.com/BastionWeb/bit-manager/packages/server",
+  "repository": "https://github.com/abeagley/bit-manager-service",
   "author": "Aric Beagley <development@bastionweb.io>",
   "license": "GPL-3.0-or-later",
   "private": false,
