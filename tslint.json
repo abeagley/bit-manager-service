@@ -1,0 +1,11 @@
+{
+  "cliOptions": {
+    "exclude": [
+      "src/generated/**/*.ts"
+    ]
+  },
+  "extends": ["tslint:latest", "tslint-config-standard"],
+  "rules": {
+    "no-console": false
+  }
+}

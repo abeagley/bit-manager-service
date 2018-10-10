@@ -1,0 +1,38 @@
+type Bit {
+  createdBy: User! @relation(name: "UserCreatedBits")
+  id: ID! @unique
+  name: String!
+  repository: BitRepository! @relation(name: "BitRepositoryBits")
+  version: String!
+}
+
+type BitRepository {
+  bits: [Bit!]! @relation(name: "BitRepositoryBits")
+  createdBy: User! @relation(name: "UserCreatedBitRepos")
+  id: ID! @unique
+  isLocal: Boolean! @default(value: false)
+  name: String! @unique
+  url: String! @unique
+}
+
+type Setting {
+  baseBitPath: String! @unique
+  companyName: String! @unique
+  id: ID! @unique
+  installed: Boolean! @default(value: false)
+}
+
+type User {
+  createdBits: [Bit!]! @relation(name: "UserCreatedBits")
+  createdRepositories: [BitRepository!]! @relation(name: "UserCreatedBitRepos")
+  credentials: String
+  email: String! @unique
+  name: String!
+  password: String!
+  role: UserRole! @default(value: USER)
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}

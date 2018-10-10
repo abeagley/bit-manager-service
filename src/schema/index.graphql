@@ -1,0 +1,20 @@
+# import Bit, BitOrderByInput, BitWhereInput, BitWhereUniqueInput from '../generated/prisma/datamodel.graphql'
+# import BitRepository, BitRepositoryOrderByInput, BitRepositoryWhereInput, BitRepositoryWhereUniqueInput from '../generated/prisma/datamodel.graphql'
+# import UserOrderByInput, UserRole, UserWhereInput, UserWhereUniqueInput from '../generated/prisma/datamodel.graphql'
+# import Setting, SettingCreateInput from '../generated/prisma/datamodel.graphql'
+# import ApiUser, ApiUserCreateInput from './user.graphql'
+
+type Query {
+  bit (where: BitWhereUniqueInput): Bit
+  bits (where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]
+  bitRepository (where: BitRepositoryWhereUniqueInput): BitRepository
+  bitRepositories (where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository]
+  settings: Setting
+  user (where: UserWhereUniqueInput): ApiUser
+  users (where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ApiUser]
+}
+
+type Mutation {
+  createSettings (data: SettingCreateInput): Setting
+  createUser (data: ApiUserCreateInput): ApiUser
+}

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "experimentalDecorators": true,
+    "lib": ["esnext", "esnext.asynciterable"],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "sourceRoot": "./src",
+    "target": "es2015"
+  },
+  "exclude": [
+    "src/**/*.spec.ts"
+  ]
+}

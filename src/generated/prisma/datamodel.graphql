@@ -1,0 +1,1370 @@
+# source: http://localhost:4466
+# timestamp: Sun Oct 07 2018 21:43:48 GMT-0600 (MDT)
+
+type AggregateBit {
+  count: Int!
+}
+
+type AggregateBitRepository {
+  count: Int!
+}
+
+type AggregateSetting {
+  count: Int!
+}
+
+type AggregateUser {
+  count: Int!
+}
+
+type BatchPayload {
+  """The number of nodes that have been affected by the Batch operation."""
+  count: Long!
+}
+
+type Bit implements Node {
+  createdBy(where: UserWhereInput): User!
+  id: ID!
+  name: String!
+  repository(where: BitRepositoryWhereInput): BitRepository!
+  version: String!
+}
+
+"""A connection to a list of items."""
+type BitConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BitEdge]!
+  aggregate: AggregateBit!
+}
+
+input BitCreateInput {
+  name: String!
+  version: String!
+  createdBy: UserCreateOneWithoutCreatedBitsInput!
+  repository: BitRepositoryCreateOneWithoutBitsInput!
+}
+
+input BitCreateManyWithoutCreatedByInput {
+  create: [BitCreateWithoutCreatedByInput!]
+  connect: [BitWhereUniqueInput!]
+}
+
+input BitCreateManyWithoutRepositoryInput {
+  create: [BitCreateWithoutRepositoryInput!]
+  connect: [BitWhereUniqueInput!]
+}
+
+input BitCreateWithoutCreatedByInput {
+  name: String!
+  version: String!
+  repository: BitRepositoryCreateOneWithoutBitsInput!
+}
+
+input BitCreateWithoutRepositoryInput {
+  name: String!
+  version: String!
+  createdBy: UserCreateOneWithoutCreatedBitsInput!
+}
+
+"""An edge in a connection."""
+type BitEdge {
+  """The item at the end of the edge."""
+  node: Bit!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum BitOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  version_ASC
+  version_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type BitPreviousValues {
+  id: ID!
+  name: String!
+  version: String!
+}
+
+type BitRepository implements Node {
+  bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
+  createdBy(where: UserWhereInput): User!
+  id: ID!
+  isLocal: Boolean!
+  name: String!
+  url: String!
+}
+
+"""A connection to a list of items."""
+type BitRepositoryConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BitRepositoryEdge]!
+  aggregate: AggregateBitRepository!
+}
+
+input BitRepositoryCreateInput {
+  isLocal: Boolean
+  name: String!
+  url: String!
+  bits: BitCreateManyWithoutRepositoryInput
+  createdBy: UserCreateOneWithoutCreatedRepositoriesInput!
+}
+
+input BitRepositoryCreateManyWithoutCreatedByInput {
+  create: [BitRepositoryCreateWithoutCreatedByInput!]
+  connect: [BitRepositoryWhereUniqueInput!]
+}
+
+input BitRepositoryCreateOneWithoutBitsInput {
+  create: BitRepositoryCreateWithoutBitsInput
+  connect: BitRepositoryWhereUniqueInput
+}
+
+input BitRepositoryCreateWithoutBitsInput {
+  isLocal: Boolean
+  name: String!
+  url: String!
+  createdBy: UserCreateOneWithoutCreatedRepositoriesInput!
+}
+
+input BitRepositoryCreateWithoutCreatedByInput {
+  isLocal: Boolean
+  name: String!
+  url: String!
+  bits: BitCreateManyWithoutRepositoryInput
+}
+
+"""An edge in a connection."""
+type BitRepositoryEdge {
+  """The item at the end of the edge."""
+  node: BitRepository!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum BitRepositoryOrderByInput {
+  id_ASC
+  id_DESC
+  isLocal_ASC
+  isLocal_DESC
+  name_ASC
+  name_DESC
+  url_ASC
+  url_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type BitRepositoryPreviousValues {
+  id: ID!
+  isLocal: Boolean!
+  name: String!
+  url: String!
+}
+
+type BitRepositorySubscriptionPayload {
+  mutation: MutationType!
+  node: BitRepository
+  updatedFields: [String!]
+  previousValues: BitRepositoryPreviousValues
+}
+
+input BitRepositorySubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BitRepositorySubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BitRepositorySubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BitRepositorySubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: BitRepositoryWhereInput
+}
+
+input BitRepositoryUpdateInput {
+  isLocal: Boolean
+  name: String
+  url: String
+  bits: BitUpdateManyWithoutRepositoryInput
+  createdBy: UserUpdateOneRequiredWithoutCreatedRepositoriesInput
+}
+
+input BitRepositoryUpdateManyWithoutCreatedByInput {
+  create: [BitRepositoryCreateWithoutCreatedByInput!]
+  connect: [BitRepositoryWhereUniqueInput!]
+  disconnect: [BitRepositoryWhereUniqueInput!]
+  delete: [BitRepositoryWhereUniqueInput!]
+  update: [BitRepositoryUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [BitRepositoryUpsertWithWhereUniqueWithoutCreatedByInput!]
+}
+
+input BitRepositoryUpdateOneRequiredWithoutBitsInput {
+  create: BitRepositoryCreateWithoutBitsInput
+  connect: BitRepositoryWhereUniqueInput
+  update: BitRepositoryUpdateWithoutBitsDataInput
+  upsert: BitRepositoryUpsertWithoutBitsInput
+}
+
+input BitRepositoryUpdateWithoutBitsDataInput {
+  isLocal: Boolean
+  name: String
+  url: String
+  createdBy: UserUpdateOneRequiredWithoutCreatedRepositoriesInput
+}
+
+input BitRepositoryUpdateWithoutCreatedByDataInput {
+  isLocal: Boolean
+  name: String
+  url: String
+  bits: BitUpdateManyWithoutRepositoryInput
+}
+
+input BitRepositoryUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: BitRepositoryWhereUniqueInput!
+  data: BitRepositoryUpdateWithoutCreatedByDataInput!
+}
+
+input BitRepositoryUpsertWithoutBitsInput {
+  update: BitRepositoryUpdateWithoutBitsDataInput!
+  create: BitRepositoryCreateWithoutBitsInput!
+}
+
+input BitRepositoryUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: BitRepositoryWhereUniqueInput!
+  update: BitRepositoryUpdateWithoutCreatedByDataInput!
+  create: BitRepositoryCreateWithoutCreatedByInput!
+}
+
+input BitRepositoryWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BitRepositoryWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BitRepositoryWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BitRepositoryWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  isLocal: Boolean
+
+  """All values that are not equal to given value."""
+  isLocal_not: Boolean
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  bits_every: BitWhereInput
+  bits_some: BitWhereInput
+  bits_none: BitWhereInput
+  createdBy: UserWhereInput
+}
+
+input BitRepositoryWhereUniqueInput {
+  id: ID
+  name: String
+  url: String
+}
+
+type BitSubscriptionPayload {
+  mutation: MutationType!
+  node: Bit
+  updatedFields: [String!]
+  previousValues: BitPreviousValues
+}
+
+input BitSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BitSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BitSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BitSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: BitWhereInput
+}
+
+input BitUpdateInput {
+  name: String
+  version: String
+  createdBy: UserUpdateOneRequiredWithoutCreatedBitsInput
+  repository: BitRepositoryUpdateOneRequiredWithoutBitsInput
+}
+
+input BitUpdateManyWithoutCreatedByInput {
+  create: [BitCreateWithoutCreatedByInput!]
+  connect: [BitWhereUniqueInput!]
+  disconnect: [BitWhereUniqueInput!]
+  delete: [BitWhereUniqueInput!]
+  update: [BitUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [BitUpsertWithWhereUniqueWithoutCreatedByInput!]
+}
+
+input BitUpdateManyWithoutRepositoryInput {
+  create: [BitCreateWithoutRepositoryInput!]
+  connect: [BitWhereUniqueInput!]
+  disconnect: [BitWhereUniqueInput!]
+  delete: [BitWhereUniqueInput!]
+  update: [BitUpdateWithWhereUniqueWithoutRepositoryInput!]
+  upsert: [BitUpsertWithWhereUniqueWithoutRepositoryInput!]
+}
+
+input BitUpdateWithoutCreatedByDataInput {
+  name: String
+  version: String
+  repository: BitRepositoryUpdateOneRequiredWithoutBitsInput
+}
+
+input BitUpdateWithoutRepositoryDataInput {
+  name: String
+  version: String
+  createdBy: UserUpdateOneRequiredWithoutCreatedBitsInput
+}
+
+input BitUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: BitWhereUniqueInput!
+  data: BitUpdateWithoutCreatedByDataInput!
+}
+
+input BitUpdateWithWhereUniqueWithoutRepositoryInput {
+  where: BitWhereUniqueInput!
+  data: BitUpdateWithoutRepositoryDataInput!
+}
+
+input BitUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: BitWhereUniqueInput!
+  update: BitUpdateWithoutCreatedByDataInput!
+  create: BitCreateWithoutCreatedByInput!
+}
+
+input BitUpsertWithWhereUniqueWithoutRepositoryInput {
+  where: BitWhereUniqueInput!
+  update: BitUpdateWithoutRepositoryDataInput!
+  create: BitCreateWithoutRepositoryInput!
+}
+
+input BitWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BitWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BitWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BitWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  version: String
+
+  """All values that are not equal to given value."""
+  version_not: String
+
+  """All values that are contained in given list."""
+  version_in: [String!]
+
+  """All values that are not contained in given list."""
+  version_not_in: [String!]
+
+  """All values less than the given value."""
+  version_lt: String
+
+  """All values less than or equal the given value."""
+  version_lte: String
+
+  """All values greater than the given value."""
+  version_gt: String
+
+  """All values greater than or equal the given value."""
+  version_gte: String
+
+  """All values containing the given string."""
+  version_contains: String
+
+  """All values not containing the given string."""
+  version_not_contains: String
+
+  """All values starting with the given string."""
+  version_starts_with: String
+
+  """All values not starting with the given string."""
+  version_not_starts_with: String
+
+  """All values ending with the given string."""
+  version_ends_with: String
+
+  """All values not ending with the given string."""
+  version_not_ends_with: String
+  createdBy: UserWhereInput
+  repository: BitRepositoryWhereInput
+}
+
+input BitWhereUniqueInput {
+  id: ID
+}
+
+"""Raw JSON value"""
+scalar Json
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createBit(data: BitCreateInput!): Bit!
+  createBitRepository(data: BitRepositoryCreateInput!): BitRepository!
+  createSetting(data: SettingCreateInput!): Setting!
+  createUser(data: UserCreateInput!): User!
+  updateBit(data: BitUpdateInput!, where: BitWhereUniqueInput!): Bit
+  updateBitRepository(data: BitRepositoryUpdateInput!, where: BitRepositoryWhereUniqueInput!): BitRepository
+  updateSetting(data: SettingUpdateInput!, where: SettingWhereUniqueInput!): Setting
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deleteBit(where: BitWhereUniqueInput!): Bit
+  deleteBitRepository(where: BitRepositoryWhereUniqueInput!): BitRepository
+  deleteSetting(where: SettingWhereUniqueInput!): Setting
+  deleteUser(where: UserWhereUniqueInput!): User
+  upsertBit(where: BitWhereUniqueInput!, create: BitCreateInput!, update: BitUpdateInput!): Bit!
+  upsertBitRepository(where: BitRepositoryWhereUniqueInput!, create: BitRepositoryCreateInput!, update: BitRepositoryUpdateInput!): BitRepository!
+  upsertSetting(where: SettingWhereUniqueInput!, create: SettingCreateInput!, update: SettingUpdateInput!): Setting!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyBits(data: BitUpdateInput!, where: BitWhereInput): BatchPayload!
+  updateManyBitRepositories(data: BitRepositoryUpdateInput!, where: BitRepositoryWhereInput): BatchPayload!
+  updateManySettings(data: SettingUpdateInput!, where: SettingWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  deleteManyBits(where: BitWhereInput): BatchPayload!
+  deleteManyBitRepositories(where: BitRepositoryWhereInput): BatchPayload!
+  deleteManySettings(where: SettingWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  executeRaw(database: PrismaDatabase, query: String!): Json!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+enum PrismaDatabase {
+  default
+}
+
+type Query {
+  bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]!
+  bitRepositories(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository]!
+  settings(where: SettingWhereInput, orderBy: SettingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Setting]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  bit(where: BitWhereUniqueInput!): Bit
+  bitRepository(where: BitRepositoryWhereUniqueInput!): BitRepository
+  setting(where: SettingWhereUniqueInput!): Setting
+  user(where: UserWhereUniqueInput!): User
+  bitsConnection(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitConnection!
+  bitRepositoriesConnection(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitRepositoryConnection!
+  settingsConnection(where: SettingWhereInput, orderBy: SettingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SettingConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+type Setting implements Node {
+  baseBitPath: String!
+  companyName: String!
+  id: ID!
+  installed: Boolean!
+}
+
+"""A connection to a list of items."""
+type SettingConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SettingEdge]!
+  aggregate: AggregateSetting!
+}
+
+input SettingCreateInput {
+  baseBitPath: String!
+  companyName: String!
+  installed: Boolean
+}
+
+"""An edge in a connection."""
+type SettingEdge {
+  """The item at the end of the edge."""
+  node: Setting!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum SettingOrderByInput {
+  baseBitPath_ASC
+  baseBitPath_DESC
+  companyName_ASC
+  companyName_DESC
+  id_ASC
+  id_DESC
+  installed_ASC
+  installed_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type SettingPreviousValues {
+  baseBitPath: String!
+  companyName: String!
+  id: ID!
+  installed: Boolean!
+}
+
+type SettingSubscriptionPayload {
+  mutation: MutationType!
+  node: Setting
+  updatedFields: [String!]
+  previousValues: SettingPreviousValues
+}
+
+input SettingSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SettingSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SettingSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SettingSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SettingWhereInput
+}
+
+input SettingUpdateInput {
+  baseBitPath: String
+  companyName: String
+  installed: Boolean
+}
+
+input SettingWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SettingWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SettingWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SettingWhereInput!]
+  baseBitPath: String
+
+  """All values that are not equal to given value."""
+  baseBitPath_not: String
+
+  """All values that are contained in given list."""
+  baseBitPath_in: [String!]
+
+  """All values that are not contained in given list."""
+  baseBitPath_not_in: [String!]
+
+  """All values less than the given value."""
+  baseBitPath_lt: String
+
+  """All values less than or equal the given value."""
+  baseBitPath_lte: String
+
+  """All values greater than the given value."""
+  baseBitPath_gt: String
+
+  """All values greater than or equal the given value."""
+  baseBitPath_gte: String
+
+  """All values containing the given string."""
+  baseBitPath_contains: String
+
+  """All values not containing the given string."""
+  baseBitPath_not_contains: String
+
+  """All values starting with the given string."""
+  baseBitPath_starts_with: String
+
+  """All values not starting with the given string."""
+  baseBitPath_not_starts_with: String
+
+  """All values ending with the given string."""
+  baseBitPath_ends_with: String
+
+  """All values not ending with the given string."""
+  baseBitPath_not_ends_with: String
+  companyName: String
+
+  """All values that are not equal to given value."""
+  companyName_not: String
+
+  """All values that are contained in given list."""
+  companyName_in: [String!]
+
+  """All values that are not contained in given list."""
+  companyName_not_in: [String!]
+
+  """All values less than the given value."""
+  companyName_lt: String
+
+  """All values less than or equal the given value."""
+  companyName_lte: String
+
+  """All values greater than the given value."""
+  companyName_gt: String
+
+  """All values greater than or equal the given value."""
+  companyName_gte: String
+
+  """All values containing the given string."""
+  companyName_contains: String
+
+  """All values not containing the given string."""
+  companyName_not_contains: String
+
+  """All values starting with the given string."""
+  companyName_starts_with: String
+
+  """All values not starting with the given string."""
+  companyName_not_starts_with: String
+
+  """All values ending with the given string."""
+  companyName_ends_with: String
+
+  """All values not ending with the given string."""
+  companyName_not_ends_with: String
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  installed: Boolean
+
+  """All values that are not equal to given value."""
+  installed_not: Boolean
+}
+
+input SettingWhereUniqueInput {
+  baseBitPath: String
+  companyName: String
+  id: ID
+}
+
+type Subscription {
+  bit(where: BitSubscriptionWhereInput): BitSubscriptionPayload
+  bitRepository(where: BitRepositorySubscriptionWhereInput): BitRepositorySubscriptionPayload
+  setting(where: SettingSubscriptionWhereInput): SettingSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type User {
+  createdBits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
+  createdRepositories(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository!]
+  credentials: String
+  email: String!
+  name: String!
+  password: String!
+  role: UserRole!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  credentials: String
+  email: String!
+  name: String!
+  password: String!
+  role: UserRole
+  createdBits: BitCreateManyWithoutCreatedByInput
+  createdRepositories: BitRepositoryCreateManyWithoutCreatedByInput
+}
+
+input UserCreateOneWithoutCreatedBitsInput {
+  create: UserCreateWithoutCreatedBitsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutCreatedRepositoriesInput {
+  create: UserCreateWithoutCreatedRepositoriesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutCreatedBitsInput {
+  credentials: String
+  email: String!
+  name: String!
+  password: String!
+  role: UserRole
+  createdRepositories: BitRepositoryCreateManyWithoutCreatedByInput
+}
+
+input UserCreateWithoutCreatedRepositoriesInput {
+  credentials: String
+  email: String!
+  name: String!
+  password: String!
+  role: UserRole
+  createdBits: BitCreateManyWithoutCreatedByInput
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  credentials_ASC
+  credentials_DESC
+  email_ASC
+  email_DESC
+  name_ASC
+  name_DESC
+  password_ASC
+  password_DESC
+  role_ASC
+  role_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserPreviousValues {
+  credentials: String
+  email: String!
+  name: String!
+  password: String!
+  role: UserRole!
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+}
+
+input UserUpdateInput {
+  credentials: String
+  email: String
+  name: String
+  password: String
+  role: UserRole
+  createdBits: BitUpdateManyWithoutCreatedByInput
+  createdRepositories: BitRepositoryUpdateManyWithoutCreatedByInput
+}
+
+input UserUpdateOneRequiredWithoutCreatedBitsInput {
+  create: UserCreateWithoutCreatedBitsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutCreatedBitsDataInput
+  upsert: UserUpsertWithoutCreatedBitsInput
+}
+
+input UserUpdateOneRequiredWithoutCreatedRepositoriesInput {
+  create: UserCreateWithoutCreatedRepositoriesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutCreatedRepositoriesDataInput
+  upsert: UserUpsertWithoutCreatedRepositoriesInput
+}
+
+input UserUpdateWithoutCreatedBitsDataInput {
+  credentials: String
+  email: String
+  name: String
+  password: String
+  role: UserRole
+  createdRepositories: BitRepositoryUpdateManyWithoutCreatedByInput
+}
+
+input UserUpdateWithoutCreatedRepositoriesDataInput {
+  credentials: String
+  email: String
+  name: String
+  password: String
+  role: UserRole
+  createdBits: BitUpdateManyWithoutCreatedByInput
+}
+
+input UserUpsertWithoutCreatedBitsInput {
+  update: UserUpdateWithoutCreatedBitsDataInput!
+  create: UserCreateWithoutCreatedBitsInput!
+}
+
+input UserUpsertWithoutCreatedRepositoriesInput {
+  update: UserUpdateWithoutCreatedRepositoriesDataInput!
+  create: UserCreateWithoutCreatedRepositoriesInput!
+}
+
+input UserWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserWhereInput!]
+  credentials: String
+
+  """All values that are not equal to given value."""
+  credentials_not: String
+
+  """All values that are contained in given list."""
+  credentials_in: [String!]
+
+  """All values that are not contained in given list."""
+  credentials_not_in: [String!]
+
+  """All values less than the given value."""
+  credentials_lt: String
+
+  """All values less than or equal the given value."""
+  credentials_lte: String
+
+  """All values greater than the given value."""
+  credentials_gt: String
+
+  """All values greater than or equal the given value."""
+  credentials_gte: String
+
+  """All values containing the given string."""
+  credentials_contains: String
+
+  """All values not containing the given string."""
+  credentials_not_contains: String
+
+  """All values starting with the given string."""
+  credentials_starts_with: String
+
+  """All values not starting with the given string."""
+  credentials_not_starts_with: String
+
+  """All values ending with the given string."""
+  credentials_ends_with: String
+
+  """All values not ending with the given string."""
+  credentials_not_ends_with: String
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  role: UserRole
+
+  """All values that are not equal to given value."""
+  role_not: UserRole
+
+  """All values that are contained in given list."""
+  role_in: [UserRole!]
+
+  """All values that are not contained in given list."""
+  role_not_in: [UserRole!]
+  createdBits_every: BitWhereInput
+  createdBits_some: BitWhereInput
+  createdBits_none: BitWhereInput
+  createdRepositories_every: BitRepositoryWhereInput
+  createdRepositories_some: BitRepositoryWhereInput
+  createdRepositories_none: BitRepositoryWhereInput
+}
+
+input UserWhereUniqueInput {
+  email: String
+}

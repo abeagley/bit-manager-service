@@ -1,0 +1,39 @@
+{
+  "name": "@bit-manager/server",
+  "version": "0.1.0",
+  "description": "The GraphQL service for accessing and modifying bit repository information.",
+  "main": "src/index.ts",
+  "repository": "https://github.com/BastionWeb/bit-manager/packages/server",
+  "author": "Aric Beagley <development@bastionweb.io>",
+  "license": "GPL-3.0-or-later",
+  "private": false,
+  "scripts": {
+    "gen-types": "yarn run gen-types:prisma && yarn run gen-types:graphql",
+    "gen-types:graphql": "graphql get-schema --project database",
+    "gen-types:prisma": "cd prisma && prisma generate",
+    "lint": "tslint --project .",
+    "playground": "graphql playground",
+    "prisma-deploy": "cd prisma && prisma deploy",
+    "start": "yarn run gen-types && nodemon"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.1",
+    "dotenv": "^6.0.0",
+    "graphql": "^0.13.2",
+    "graphql-import": "^0.7.1",
+    "graphql-yoga": "^1.16.2",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.116",
+    "@types/node": "^10.11.4",
+    "graphql-cli": "^2.16.7",
+    "nodemon": "^1.18.4",
+    "prisma": "^1.17.1",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.1.1"
+  }
+}
