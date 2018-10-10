@@ -19,10 +19,12 @@ type BatchPayload {
 }
 
 type Bit {
+  createdAt: DateTime!
   createdBy: User!
   id: ID!
   name: String!
   repository: BitRepository!
+  updatedAt: DateTime!
   version: String!
 }
 
@@ -67,30 +69,34 @@ type BitEdge {
 }
 
 enum BitOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
   id_ASC
   id_DESC
   name_ASC
   name_DESC
-  version_ASC
-  version_DESC
-  createdAt_ASC
-  createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  version_ASC
+  version_DESC
 }
 
 type BitPreviousValues {
+  createdAt: DateTime!
   id: ID!
   name: String!
+  updatedAt: DateTime!
   version: String!
 }
 
 type BitRepository {
   bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
+  createdAt: DateTime!
   createdBy: User!
   id: ID!
   isLocal: Boolean!
   name: String!
+  updatedAt: DateTime!
   url: String!
 }
 
@@ -138,24 +144,26 @@ type BitRepositoryEdge {
 }
 
 enum BitRepositoryOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
   id_ASC
   id_DESC
   isLocal_ASC
   isLocal_DESC
   name_ASC
   name_DESC
-  url_ASC
-  url_DESC
-  createdAt_ASC
-  createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  url_ASC
+  url_DESC
 }
 
 type BitRepositoryPreviousValues {
+  createdAt: DateTime!
   id: ID!
   isLocal: Boolean!
   name: String!
+  updatedAt: DateTime!
   url: String!
 }
 
@@ -235,6 +243,14 @@ input BitRepositoryWhereInput {
   bits_every: BitWhereInput
   bits_some: BitWhereInput
   bits_none: BitWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   createdBy: UserWhereInput
   id: ID
   id_not: ID
@@ -266,6 +282,14 @@ input BitRepositoryWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   url: String
   url_not: String
   url_in: [String!]
@@ -369,6 +393,14 @@ input BitUpsertWithWhereUniqueWithoutRepositoryInput {
 }
 
 input BitWhereInput {
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   createdBy: UserWhereInput
   id: ID
   id_not: ID
@@ -399,6 +431,14 @@ input BitWhereInput {
   name_ends_with: String
   name_not_ends_with: String
   repository: BitRepositoryWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   version: String
   version_not: String
   version_in: [String!]
@@ -421,6 +461,8 @@ input BitWhereInput {
 input BitWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 scalar Long
 
@@ -486,9 +528,11 @@ type Query {
 
 type Setting {
   baseBitPath: String!
+  createdAt: DateTime!
   companyName: String!
   id: ID!
   installed: Boolean!
+  updatedAt: DateTime!
 }
 
 type SettingConnection {
@@ -511,23 +555,25 @@ type SettingEdge {
 enum SettingOrderByInput {
   baseBitPath_ASC
   baseBitPath_DESC
+  createdAt_ASC
+  createdAt_DESC
   companyName_ASC
   companyName_DESC
   id_ASC
   id_DESC
   installed_ASC
   installed_DESC
-  createdAt_ASC
-  createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
 type SettingPreviousValues {
   baseBitPath: String!
+  createdAt: DateTime!
   companyName: String!
   id: ID!
   installed: Boolean!
+  updatedAt: DateTime!
 }
 
 type SettingSubscriptionPayload {
@@ -569,6 +615,14 @@ input SettingWhereInput {
   baseBitPath_not_starts_with: String
   baseBitPath_ends_with: String
   baseBitPath_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   companyName: String
   companyName_not: String
   companyName_in: [String!]
@@ -599,6 +653,14 @@ input SettingWhereInput {
   id_not_ends_with: ID
   installed: Boolean
   installed_not: Boolean
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [SettingWhereInput!]
   OR: [SettingWhereInput!]
   NOT: [SettingWhereInput!]
@@ -618,13 +680,16 @@ type Subscription {
 }
 
 type User {
+  createdAt: DateTime!
   createdBits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
   createdRepositories(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository!]
   credentials: String
   email: String!
+  id: ID!
   name: String!
   password: String!
   role: UserRole!
+  updatedAt: DateTime!
 }
 
 type UserConnection {
@@ -677,30 +742,33 @@ type UserEdge {
 }
 
 enum UserOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
   credentials_ASC
   credentials_DESC
   email_ASC
   email_DESC
+  id_ASC
+  id_DESC
   name_ASC
   name_DESC
   password_ASC
   password_DESC
   role_ASC
   role_DESC
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
 type UserPreviousValues {
+  createdAt: DateTime!
   credentials: String
   email: String!
+  id: ID!
   name: String!
   password: String!
   role: UserRole!
+  updatedAt: DateTime!
 }
 
 enum UserRole {
@@ -779,6 +847,14 @@ input UserUpsertWithoutCreatedRepositoriesInput {
 }
 
 input UserWhereInput {
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   createdBits_every: BitWhereInput
   createdBits_some: BitWhereInput
   createdBits_none: BitWhereInput
@@ -813,6 +889,20 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   name: String
   name_not: String
   name_in: [String!]
@@ -845,6 +935,14 @@ input UserWhereInput {
   role_not: UserRole
   role_in: [UserRole!]
   role_not_in: [UserRole!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -852,5 +950,6 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   email: String
+  id: ID
 }
 `

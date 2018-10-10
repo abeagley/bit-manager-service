@@ -6,8 +6,9 @@
     "experimentalDecorators": true,
     "lib": ["esnext", "esnext.asynciterable"],
     "module": "commonjs",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noUnusedLocals": true,
+    "strictNullChecks": false,
     "sourceRoot": "./src",
     "target": "es2015"
   },

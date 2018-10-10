@@ -1,38 +1,47 @@
 type Bit {
+  createdAt: DateTime!
   createdBy: User! @relation(name: "UserCreatedBits")
   id: ID! @unique
   name: String!
   repository: BitRepository! @relation(name: "BitRepositoryBits")
+  updatedAt: DateTime!
   version: String!
 }
 
 type BitRepository {
   bits: [Bit!]! @relation(name: "BitRepositoryBits")
+  createdAt: DateTime!
   createdBy: User! @relation(name: "UserCreatedBitRepos")
   id: ID! @unique
   isLocal: Boolean! @default(value: false)
   name: String! @unique
+  updatedAt: DateTime!
   url: String! @unique
 }
 
 type Setting {
   baseBitPath: String! @unique
+  createdAt: DateTime!
   companyName: String! @unique
   id: ID! @unique
   installed: Boolean! @default(value: false)
+  updatedAt: DateTime!
+}
+
+enum UserRole {
+  ADMIN,
+  USER
 }
 
 type User {
+  createdAt: DateTime!
   createdBits: [Bit!]! @relation(name: "UserCreatedBits")
   createdRepositories: [BitRepository!]! @relation(name: "UserCreatedBitRepos")
   credentials: String
   email: String! @unique
+  id: ID! @unique
   name: String!
   password: String!
   role: UserRole! @default(value: USER)
-}
-
-enum UserRole {
-  ADMIN
-  USER
+  updatedAt: DateTime!
 }

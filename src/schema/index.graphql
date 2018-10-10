@@ -2,19 +2,24 @@
 # import BitRepository, BitRepositoryOrderByInput, BitRepositoryWhereInput, BitRepositoryWhereUniqueInput from '../generated/prisma/datamodel.graphql'
 # import UserOrderByInput, UserRole, UserWhereInput, UserWhereUniqueInput from '../generated/prisma/datamodel.graphql'
 # import Setting, SettingCreateInput from '../generated/prisma/datamodel.graphql'
-# import ApiUser, ApiUserCreateInput from './user.graphql'
+
+# import InstallCreateInput, SanityCheck from './install.graphql'
+# import ApiUser, ApiUserCreateInput, ApiUserLoginInput, ApiUserLogin from './user.graphql'
 
 type Query {
-  bit (where: BitWhereUniqueInput): Bit
-  bits (where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]
-  bitRepository (where: BitRepositoryWhereUniqueInput): BitRepository
-  bitRepositories (where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository]
+  bit (where: BitWhereUniqueInput!): Bit
+  bits (where: BitWhereInput!, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]
+  bitRepository (where: BitRepositoryWhereUniqueInput!): BitRepository
+  bitRepositories (where: BitRepositoryWhereInput!, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository]
+  sanityCheck: SanityCheck
   settings: Setting
-  user (where: UserWhereUniqueInput): ApiUser
-  users (where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ApiUser]
+  user (where: UserWhereUniqueInput!): ApiUser
+  users (where: UserWhereInput!, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ApiUser]
 }
 
 type Mutation {
-  createSettings (data: SettingCreateInput): Setting
-  createUser (data: ApiUserCreateInput): ApiUser
+  createSettings (data: SettingCreateInput!): Setting
+  createUser (data: ApiUserCreateInput!): ApiUser
+  install (data: InstallCreateInput!): Setting
+  login (data: ApiUserLoginInput!): ApiUserLogin!
 }

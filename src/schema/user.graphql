@@ -6,11 +6,21 @@ type ApiUser {
   credentials: String
   email: String!
   name: String!
-  role: UserRole!
+  role: UserRole
 }
 
 input ApiUserCreateInput {
   email: String!
   password: String!
   role: UserRole
+}
+
+input ApiUserLoginInput {
+  email: String!
+  password: String!
+}
+
+type ApiUserLogin {
+  profile: ApiUser
+  token: String
 }

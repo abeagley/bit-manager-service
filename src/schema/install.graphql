@@ -1,0 +1,12 @@
+input InstallCreateInput {
+  bitPath: String!
+  companyName: String!
+  credentials: String!
+  email: String!
+  password: String!
+}
+
+type SanityCheck {
+  bitVersion: String
+  gitVersion: String
+}

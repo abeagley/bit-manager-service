@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sun Oct 07 2018 21:43:48 GMT-0600 (MDT)
+# timestamp: Wed Oct 10 2018 10:52:47 GMT-0600 (MDT)
 
 type AggregateBit {
   count: Int!
@@ -23,10 +23,12 @@ type BatchPayload {
 }
 
 type Bit implements Node {
+  createdAt: DateTime!
   createdBy(where: UserWhereInput): User!
   id: ID!
   name: String!
   repository(where: BitRepositoryWhereInput): BitRepository!
+  updatedAt: DateTime!
   version: String!
 }
 
@@ -79,30 +81,34 @@ type BitEdge {
 }
 
 enum BitOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
   id_ASC
   id_DESC
   name_ASC
   name_DESC
-  version_ASC
-  version_DESC
   updatedAt_ASC
   updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
+  version_ASC
+  version_DESC
 }
 
 type BitPreviousValues {
+  createdAt: DateTime!
   id: ID!
   name: String!
+  updatedAt: DateTime!
   version: String!
 }
 
 type BitRepository implements Node {
   bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
+  createdAt: DateTime!
   createdBy(where: UserWhereInput): User!
   id: ID!
   isLocal: Boolean!
   name: String!
+  updatedAt: DateTime!
   url: String!
 }
 
@@ -158,24 +164,26 @@ type BitRepositoryEdge {
 }
 
 enum BitRepositoryOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
   id_ASC
   id_DESC
   isLocal_ASC
   isLocal_DESC
   name_ASC
   name_DESC
-  url_ASC
-  url_DESC
   updatedAt_ASC
   updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
+  url_ASC
+  url_DESC
 }
 
 type BitRepositoryPreviousValues {
+  createdAt: DateTime!
   id: ID!
   isLocal: Boolean!
   name: String!
+  updatedAt: DateTime!
   url: String!
 }
 
@@ -281,6 +289,28 @@ input BitRepositoryWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [BitRepositoryWhereInput!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   id: ID
 
   """All values that are not equal to given value."""
@@ -365,6 +395,28 @@ input BitRepositoryWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   url: String
 
   """All values that are not equal to given value."""
@@ -524,6 +576,28 @@ input BitWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [BitWhereInput!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   id: ID
 
   """All values that are not equal to given value."""
@@ -604,6 +678,28 @@ input BitWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   version: String
 
   """All values that are not equal to given value."""
@@ -651,6 +747,8 @@ input BitWhereInput {
 input BitWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 """Raw JSON value"""
 scalar Json
@@ -743,9 +841,11 @@ type Query {
 
 type Setting implements Node {
   baseBitPath: String!
+  createdAt: DateTime!
   companyName: String!
   id: ID!
   installed: Boolean!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -776,6 +876,8 @@ type SettingEdge {
 enum SettingOrderByInput {
   baseBitPath_ASC
   baseBitPath_DESC
+  createdAt_ASC
+  createdAt_DESC
   companyName_ASC
   companyName_DESC
   id_ASC
@@ -784,15 +886,15 @@ enum SettingOrderByInput {
   installed_DESC
   updatedAt_ASC
   updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type SettingPreviousValues {
   baseBitPath: String!
+  createdAt: DateTime!
   companyName: String!
   id: ID!
   installed: Boolean!
+  updatedAt: DateTime!
 }
 
 type SettingSubscriptionPayload {
@@ -889,6 +991,28 @@ input SettingWhereInput {
 
   """All values not ending with the given string."""
   baseBitPath_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   companyName: String
 
   """All values that are not equal to given value."""
@@ -973,6 +1097,28 @@ input SettingWhereInput {
 
   """All values that are not equal to given value."""
   installed_not: Boolean
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 input SettingWhereUniqueInput {
@@ -988,14 +1134,17 @@ type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
-type User {
+type User implements Node {
+  createdAt: DateTime!
   createdBits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
   createdRepositories(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository!]
   credentials: String
   email: String!
+  id: ID!
   name: String!
   password: String!
   role: UserRole!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -1056,30 +1205,33 @@ type UserEdge {
 }
 
 enum UserOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
   credentials_ASC
   credentials_DESC
   email_ASC
   email_DESC
+  id_ASC
+  id_DESC
   name_ASC
   name_DESC
   password_ASC
   password_DESC
   role_ASC
   role_DESC
-  id_ASC
-  id_DESC
   updatedAt_ASC
   updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type UserPreviousValues {
+  createdAt: DateTime!
   credentials: String
   email: String!
+  id: ID!
   name: String!
   password: String!
   role: UserRole!
+  updatedAt: DateTime!
 }
 
 enum UserRole {
@@ -1187,6 +1339,28 @@ input UserWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserWhereInput!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   credentials: String
 
   """All values that are not equal to given value."""
@@ -1267,6 +1441,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   name: String
 
   """All values that are not equal to given value."""
@@ -1357,6 +1571,28 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [UserRole!]
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   createdBits_every: BitWhereInput
   createdBits_some: BitWhereInput
   createdBits_none: BitWhereInput
@@ -1367,4 +1603,5 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   email: String
+  id: ID
 }
