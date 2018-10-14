@@ -8,5 +8,6 @@ input InstallCreateInput {
 
 type SanityCheck {
   bitVersion: String
+  currentUser: String
   gitVersion: String
 }

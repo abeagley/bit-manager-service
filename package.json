@@ -8,25 +8,26 @@
   "license": "GPL-3.0-or-later",
   "private": false,
   "scripts": {
+    "docker": "npm rebuild bcrypt --build-from-source && yarn run gen-types && yarn start",
     "gen-types": "yarn run gen-types:prisma && yarn run gen-types:graphql",
     "gen-types:graphql": "graphql get-schema --project database",
-    "gen-types:prisma": "cd prisma && prisma generate",
+    "gen-types:prisma": "cd prisma && prisma deploy",
     "lint": "tslint --project .",
     "playground": "graphql playground",
     "prisma-deploy": "cd prisma && prisma deploy",
-    "start": "yarn run gen-types && nodemon"
+    "start": "nodemon"
   },
   "dependencies": {
     "bcrypt": "^3.0.1",
     "bit-bin": "^13.0.4",
     "dotenv": "^6.0.0",
-    "exec-sh": "^0.3.1",
     "fs-extra": "^7.0.0",
     "graphql": "^0.13.2",
     "graphql-import": "^0.7.1",
     "graphql-yoga": "^1.16.2",
     "jsonwebtoken": "^8.3.0",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "shell-exec": "^1.0.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

@@ -1,7 +1,11 @@
 version: '3'
 services:
   bm_prisma:
+    depends_on:
+      - bm_mysql
     image: prismagraphql/prisma:1.17
+    logging:
+      driver: none
     restart: always
     ports:
     - "4466:4466"
@@ -21,10 +25,22 @@ services:
             rawAccess: true
   bm_mysql:
     image: mysql:5.7
+    logging:
+      driver: none
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: prisma
     volumes:
       - mysql:/var/lib/mysql
+  bm:
+    build: .
+    depends_on:
+      - bm_mysql
+      - bm_prisma
+    ports:
+      - "2222:22"
+      - "4000:4000"
+    volumes:
+      - ".:/home/bit/server"
 volumes:
   mysql:

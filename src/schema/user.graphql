@@ -1,8 +1,8 @@
-# import Bit, BitRepository, UserRole from '../generated/prisma/datamodel.graphql'
+# import Bit, BitScope, UserRole from '../generated/prisma/datamodel.graphql'
 
 type ApiUser {
   createdBits: [Bit!]!
-  createdRepositories: [BitRepository!]!
+  createdRepositories: [BitScope!]!
   credentials: String
   email: String!
   name: String!

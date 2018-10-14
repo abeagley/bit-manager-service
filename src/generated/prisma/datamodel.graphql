@@ -1,11 +1,11 @@
 # source: http://localhost:4466
-# timestamp: Wed Oct 10 2018 10:52:47 GMT-0600 (MDT)
+# timestamp: Fri Oct 12 2018 20:46:41 GMT-0600 (MDT)
 
 type AggregateBit {
   count: Int!
 }
 
-type AggregateBitRepository {
+type AggregateBitScope {
   count: Int!
 }
 
@@ -27,7 +27,7 @@ type Bit implements Node {
   createdBy(where: UserWhereInput): User!
   id: ID!
   name: String!
-  repository(where: BitRepositoryWhereInput): BitRepository!
+  scope(where: BitScopeWhereInput): BitScope!
   updatedAt: DateTime!
   version: String!
 }
@@ -46,7 +46,7 @@ input BitCreateInput {
   name: String!
   version: String!
   createdBy: UserCreateOneWithoutCreatedBitsInput!
-  repository: BitRepositoryCreateOneWithoutBitsInput!
+  scope: BitScopeCreateOneWithoutBitsInput!
 }
 
 input BitCreateManyWithoutCreatedByInput {
@@ -54,18 +54,18 @@ input BitCreateManyWithoutCreatedByInput {
   connect: [BitWhereUniqueInput!]
 }
 
-input BitCreateManyWithoutRepositoryInput {
-  create: [BitCreateWithoutRepositoryInput!]
+input BitCreateManyWithoutScopeInput {
+  create: [BitCreateWithoutScopeInput!]
   connect: [BitWhereUniqueInput!]
 }
 
 input BitCreateWithoutCreatedByInput {
   name: String!
   version: String!
-  repository: BitRepositoryCreateOneWithoutBitsInput!
+  scope: BitScopeCreateOneWithoutBitsInput!
 }
 
-input BitCreateWithoutRepositoryInput {
+input BitCreateWithoutScopeInput {
   name: String!
   version: String!
   createdBy: UserCreateOneWithoutCreatedBitsInput!
@@ -101,69 +101,73 @@ type BitPreviousValues {
   version: String!
 }
 
-type BitRepository implements Node {
+type BitScope implements Node {
   bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
   createdAt: DateTime!
   createdBy(where: UserWhereInput): User!
   id: ID!
   isLocal: Boolean!
   name: String!
+  pathName: String!
   updatedAt: DateTime!
-  url: String!
+  url: String
 }
 
 """A connection to a list of items."""
-type BitRepositoryConnection {
+type BitScopeConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [BitRepositoryEdge]!
-  aggregate: AggregateBitRepository!
+  edges: [BitScopeEdge]!
+  aggregate: AggregateBitScope!
 }
 
-input BitRepositoryCreateInput {
+input BitScopeCreateInput {
   isLocal: Boolean
   name: String!
-  url: String!
-  bits: BitCreateManyWithoutRepositoryInput
-  createdBy: UserCreateOneWithoutCreatedRepositoriesInput!
+  pathName: String!
+  url: String
+  bits: BitCreateManyWithoutScopeInput
+  createdBy: UserCreateOneWithoutCreatedScopesInput!
 }
 
-input BitRepositoryCreateManyWithoutCreatedByInput {
-  create: [BitRepositoryCreateWithoutCreatedByInput!]
-  connect: [BitRepositoryWhereUniqueInput!]
+input BitScopeCreateManyWithoutCreatedByInput {
+  create: [BitScopeCreateWithoutCreatedByInput!]
+  connect: [BitScopeWhereUniqueInput!]
 }
 
-input BitRepositoryCreateOneWithoutBitsInput {
-  create: BitRepositoryCreateWithoutBitsInput
-  connect: BitRepositoryWhereUniqueInput
+input BitScopeCreateOneWithoutBitsInput {
+  create: BitScopeCreateWithoutBitsInput
+  connect: BitScopeWhereUniqueInput
 }
 
-input BitRepositoryCreateWithoutBitsInput {
+input BitScopeCreateWithoutBitsInput {
   isLocal: Boolean
   name: String!
-  url: String!
-  createdBy: UserCreateOneWithoutCreatedRepositoriesInput!
+  pathName: String!
+  url: String
+  createdBy: UserCreateOneWithoutCreatedScopesInput!
 }
 
-input BitRepositoryCreateWithoutCreatedByInput {
+input BitScopeCreateWithoutCreatedByInput {
   isLocal: Boolean
   name: String!
-  url: String!
-  bits: BitCreateManyWithoutRepositoryInput
+  pathName: String!
+  url: String
+  bits: BitCreateManyWithoutScopeInput
 }
 
 """An edge in a connection."""
-type BitRepositoryEdge {
+type BitScopeEdge {
   """The item at the end of the edge."""
-  node: BitRepository!
+  node: BitScope!
 
   """A cursor for use in pagination."""
   cursor: String!
 }
 
-enum BitRepositoryOrderByInput {
+enum BitScopeOrderByInput {
   createdAt_ASC
   createdAt_DESC
   id_ASC
@@ -172,37 +176,40 @@ enum BitRepositoryOrderByInput {
   isLocal_DESC
   name_ASC
   name_DESC
+  pathName_ASC
+  pathName_DESC
   updatedAt_ASC
   updatedAt_DESC
   url_ASC
   url_DESC
 }
 
-type BitRepositoryPreviousValues {
+type BitScopePreviousValues {
   createdAt: DateTime!
   id: ID!
   isLocal: Boolean!
   name: String!
+  pathName: String!
   updatedAt: DateTime!
-  url: String!
+  url: String
 }
 
-type BitRepositorySubscriptionPayload {
+type BitScopeSubscriptionPayload {
   mutation: MutationType!
-  node: BitRepository
+  node: BitScope
   updatedFields: [String!]
-  previousValues: BitRepositoryPreviousValues
+  previousValues: BitScopePreviousValues
 }
 
-input BitRepositorySubscriptionWhereInput {
+input BitScopeSubscriptionWhereInput {
   """Logical AND on all given filters."""
-  AND: [BitRepositorySubscriptionWhereInput!]
+  AND: [BitScopeSubscriptionWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [BitRepositorySubscriptionWhereInput!]
+  OR: [BitScopeSubscriptionWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [BitRepositorySubscriptionWhereInput!]
+  NOT: [BitScopeSubscriptionWhereInput!]
 
   """
   The subscription event gets dispatched when it's listed in mutation_in
@@ -223,72 +230,75 @@ input BitRepositorySubscriptionWhereInput {
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
   updatedFields_contains_some: [String!]
-  node: BitRepositoryWhereInput
+  node: BitScopeWhereInput
 }
 
-input BitRepositoryUpdateInput {
+input BitScopeUpdateInput {
   isLocal: Boolean
   name: String
+  pathName: String
   url: String
-  bits: BitUpdateManyWithoutRepositoryInput
-  createdBy: UserUpdateOneRequiredWithoutCreatedRepositoriesInput
+  bits: BitUpdateManyWithoutScopeInput
+  createdBy: UserUpdateOneRequiredWithoutCreatedScopesInput
 }
 
-input BitRepositoryUpdateManyWithoutCreatedByInput {
-  create: [BitRepositoryCreateWithoutCreatedByInput!]
-  connect: [BitRepositoryWhereUniqueInput!]
-  disconnect: [BitRepositoryWhereUniqueInput!]
-  delete: [BitRepositoryWhereUniqueInput!]
-  update: [BitRepositoryUpdateWithWhereUniqueWithoutCreatedByInput!]
-  upsert: [BitRepositoryUpsertWithWhereUniqueWithoutCreatedByInput!]
+input BitScopeUpdateManyWithoutCreatedByInput {
+  create: [BitScopeCreateWithoutCreatedByInput!]
+  connect: [BitScopeWhereUniqueInput!]
+  disconnect: [BitScopeWhereUniqueInput!]
+  delete: [BitScopeWhereUniqueInput!]
+  update: [BitScopeUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [BitScopeUpsertWithWhereUniqueWithoutCreatedByInput!]
 }
 
-input BitRepositoryUpdateOneRequiredWithoutBitsInput {
-  create: BitRepositoryCreateWithoutBitsInput
-  connect: BitRepositoryWhereUniqueInput
-  update: BitRepositoryUpdateWithoutBitsDataInput
-  upsert: BitRepositoryUpsertWithoutBitsInput
+input BitScopeUpdateOneRequiredWithoutBitsInput {
+  create: BitScopeCreateWithoutBitsInput
+  connect: BitScopeWhereUniqueInput
+  update: BitScopeUpdateWithoutBitsDataInput
+  upsert: BitScopeUpsertWithoutBitsInput
 }
 
-input BitRepositoryUpdateWithoutBitsDataInput {
+input BitScopeUpdateWithoutBitsDataInput {
   isLocal: Boolean
   name: String
+  pathName: String
   url: String
-  createdBy: UserUpdateOneRequiredWithoutCreatedRepositoriesInput
+  createdBy: UserUpdateOneRequiredWithoutCreatedScopesInput
 }
 
-input BitRepositoryUpdateWithoutCreatedByDataInput {
+input BitScopeUpdateWithoutCreatedByDataInput {
   isLocal: Boolean
   name: String
+  pathName: String
   url: String
-  bits: BitUpdateManyWithoutRepositoryInput
+  bits: BitUpdateManyWithoutScopeInput
 }
 
-input BitRepositoryUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: BitRepositoryWhereUniqueInput!
-  data: BitRepositoryUpdateWithoutCreatedByDataInput!
+input BitScopeUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: BitScopeWhereUniqueInput!
+  data: BitScopeUpdateWithoutCreatedByDataInput!
 }
 
-input BitRepositoryUpsertWithoutBitsInput {
-  update: BitRepositoryUpdateWithoutBitsDataInput!
-  create: BitRepositoryCreateWithoutBitsInput!
+input BitScopeUpsertWithoutBitsInput {
+  update: BitScopeUpdateWithoutBitsDataInput!
+  create: BitScopeCreateWithoutBitsInput!
 }
 
-input BitRepositoryUpsertWithWhereUniqueWithoutCreatedByInput {
-  where: BitRepositoryWhereUniqueInput!
-  update: BitRepositoryUpdateWithoutCreatedByDataInput!
-  create: BitRepositoryCreateWithoutCreatedByInput!
+input BitScopeUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: BitScopeWhereUniqueInput!
+  update: BitScopeUpdateWithoutCreatedByDataInput!
+  create: BitScopeCreateWithoutCreatedByInput!
 }
 
-input BitRepositoryWhereInput {
+input BitScopeWhereInput {
   """Logical AND on all given filters."""
-  AND: [BitRepositoryWhereInput!]
+  AND: [BitScopeWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [BitRepositoryWhereInput!]
+  OR: [BitScopeWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [BitRepositoryWhereInput!]
+  NOT: [BitScopeWhereInput!]
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -395,6 +405,46 @@ input BitRepositoryWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  pathName: String
+
+  """All values that are not equal to given value."""
+  pathName_not: String
+
+  """All values that are contained in given list."""
+  pathName_in: [String!]
+
+  """All values that are not contained in given list."""
+  pathName_not_in: [String!]
+
+  """All values less than the given value."""
+  pathName_lt: String
+
+  """All values less than or equal the given value."""
+  pathName_lte: String
+
+  """All values greater than the given value."""
+  pathName_gt: String
+
+  """All values greater than or equal the given value."""
+  pathName_gte: String
+
+  """All values containing the given string."""
+  pathName_contains: String
+
+  """All values not containing the given string."""
+  pathName_not_contains: String
+
+  """All values starting with the given string."""
+  pathName_starts_with: String
+
+  """All values not starting with the given string."""
+  pathName_not_starts_with: String
+
+  """All values ending with the given string."""
+  pathName_ends_with: String
+
+  """All values not ending with the given string."""
+  pathName_not_ends_with: String
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -463,9 +513,10 @@ input BitRepositoryWhereInput {
   createdBy: UserWhereInput
 }
 
-input BitRepositoryWhereUniqueInput {
+input BitScopeWhereUniqueInput {
   id: ID
   name: String
+  pathName: String
   url: String
 }
 
@@ -512,7 +563,7 @@ input BitUpdateInput {
   name: String
   version: String
   createdBy: UserUpdateOneRequiredWithoutCreatedBitsInput
-  repository: BitRepositoryUpdateOneRequiredWithoutBitsInput
+  scope: BitScopeUpdateOneRequiredWithoutBitsInput
 }
 
 input BitUpdateManyWithoutCreatedByInput {
@@ -524,22 +575,22 @@ input BitUpdateManyWithoutCreatedByInput {
   upsert: [BitUpsertWithWhereUniqueWithoutCreatedByInput!]
 }
 
-input BitUpdateManyWithoutRepositoryInput {
-  create: [BitCreateWithoutRepositoryInput!]
+input BitUpdateManyWithoutScopeInput {
+  create: [BitCreateWithoutScopeInput!]
   connect: [BitWhereUniqueInput!]
   disconnect: [BitWhereUniqueInput!]
   delete: [BitWhereUniqueInput!]
-  update: [BitUpdateWithWhereUniqueWithoutRepositoryInput!]
-  upsert: [BitUpsertWithWhereUniqueWithoutRepositoryInput!]
+  update: [BitUpdateWithWhereUniqueWithoutScopeInput!]
+  upsert: [BitUpsertWithWhereUniqueWithoutScopeInput!]
 }
 
 input BitUpdateWithoutCreatedByDataInput {
   name: String
   version: String
-  repository: BitRepositoryUpdateOneRequiredWithoutBitsInput
+  scope: BitScopeUpdateOneRequiredWithoutBitsInput
 }
 
-input BitUpdateWithoutRepositoryDataInput {
+input BitUpdateWithoutScopeDataInput {
   name: String
   version: String
   createdBy: UserUpdateOneRequiredWithoutCreatedBitsInput
@@ -550,9 +601,9 @@ input BitUpdateWithWhereUniqueWithoutCreatedByInput {
   data: BitUpdateWithoutCreatedByDataInput!
 }
 
-input BitUpdateWithWhereUniqueWithoutRepositoryInput {
+input BitUpdateWithWhereUniqueWithoutScopeInput {
   where: BitWhereUniqueInput!
-  data: BitUpdateWithoutRepositoryDataInput!
+  data: BitUpdateWithoutScopeDataInput!
 }
 
 input BitUpsertWithWhereUniqueWithoutCreatedByInput {
@@ -561,10 +612,10 @@ input BitUpsertWithWhereUniqueWithoutCreatedByInput {
   create: BitCreateWithoutCreatedByInput!
 }
 
-input BitUpsertWithWhereUniqueWithoutRepositoryInput {
+input BitUpsertWithWhereUniqueWithoutScopeInput {
   where: BitWhereUniqueInput!
-  update: BitUpdateWithoutRepositoryDataInput!
-  create: BitCreateWithoutRepositoryInput!
+  update: BitUpdateWithoutScopeDataInput!
+  create: BitCreateWithoutScopeInput!
 }
 
 input BitWhereInput {
@@ -741,7 +792,7 @@ input BitWhereInput {
   """All values not ending with the given string."""
   version_not_ends_with: String
   createdBy: UserWhereInput
-  repository: BitRepositoryWhereInput
+  scope: BitScopeWhereInput
 }
 
 input BitWhereUniqueInput {
@@ -761,27 +812,27 @@ scalar Long
 
 type Mutation {
   createBit(data: BitCreateInput!): Bit!
-  createBitRepository(data: BitRepositoryCreateInput!): BitRepository!
+  createBitScope(data: BitScopeCreateInput!): BitScope!
   createSetting(data: SettingCreateInput!): Setting!
   createUser(data: UserCreateInput!): User!
   updateBit(data: BitUpdateInput!, where: BitWhereUniqueInput!): Bit
-  updateBitRepository(data: BitRepositoryUpdateInput!, where: BitRepositoryWhereUniqueInput!): BitRepository
+  updateBitScope(data: BitScopeUpdateInput!, where: BitScopeWhereUniqueInput!): BitScope
   updateSetting(data: SettingUpdateInput!, where: SettingWhereUniqueInput!): Setting
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteBit(where: BitWhereUniqueInput!): Bit
-  deleteBitRepository(where: BitRepositoryWhereUniqueInput!): BitRepository
+  deleteBitScope(where: BitScopeWhereUniqueInput!): BitScope
   deleteSetting(where: SettingWhereUniqueInput!): Setting
   deleteUser(where: UserWhereUniqueInput!): User
   upsertBit(where: BitWhereUniqueInput!, create: BitCreateInput!, update: BitUpdateInput!): Bit!
-  upsertBitRepository(where: BitRepositoryWhereUniqueInput!, create: BitRepositoryCreateInput!, update: BitRepositoryUpdateInput!): BitRepository!
+  upsertBitScope(where: BitScopeWhereUniqueInput!, create: BitScopeCreateInput!, update: BitScopeUpdateInput!): BitScope!
   upsertSetting(where: SettingWhereUniqueInput!, create: SettingCreateInput!, update: SettingUpdateInput!): Setting!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyBits(data: BitUpdateInput!, where: BitWhereInput): BatchPayload!
-  updateManyBitRepositories(data: BitRepositoryUpdateInput!, where: BitRepositoryWhereInput): BatchPayload!
+  updateManyBitScopes(data: BitScopeUpdateInput!, where: BitScopeWhereInput): BatchPayload!
   updateManySettings(data: SettingUpdateInput!, where: SettingWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   deleteManyBits(where: BitWhereInput): BatchPayload!
-  deleteManyBitRepositories(where: BitRepositoryWhereInput): BatchPayload!
+  deleteManyBitScopes(where: BitScopeWhereInput): BatchPayload!
   deleteManySettings(where: SettingWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
@@ -820,15 +871,15 @@ enum PrismaDatabase {
 
 type Query {
   bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]!
-  bitRepositories(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository]!
+  bitScopes(where: BitScopeWhereInput, orderBy: BitScopeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitScope]!
   settings(where: SettingWhereInput, orderBy: SettingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Setting]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   bit(where: BitWhereUniqueInput!): Bit
-  bitRepository(where: BitRepositoryWhereUniqueInput!): BitRepository
+  bitScope(where: BitScopeWhereUniqueInput!): BitScope
   setting(where: SettingWhereUniqueInput!): Setting
   user(where: UserWhereUniqueInput!): User
   bitsConnection(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitConnection!
-  bitRepositoriesConnection(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitRepositoryConnection!
+  bitScopesConnection(where: BitScopeWhereInput, orderBy: BitScopeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitScopeConnection!
   settingsConnection(where: SettingWhereInput, orderBy: SettingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SettingConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
@@ -1129,7 +1180,7 @@ input SettingWhereUniqueInput {
 
 type Subscription {
   bit(where: BitSubscriptionWhereInput): BitSubscriptionPayload
-  bitRepository(where: BitRepositorySubscriptionWhereInput): BitRepositorySubscriptionPayload
+  bitScope(where: BitScopeSubscriptionWhereInput): BitScopeSubscriptionPayload
   setting(where: SettingSubscriptionWhereInput): SettingSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -1137,7 +1188,7 @@ type Subscription {
 type User implements Node {
   createdAt: DateTime!
   createdBits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit!]
-  createdRepositories(where: BitRepositoryWhereInput, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository!]
+  createdScopes(where: BitScopeWhereInput, orderBy: BitScopeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitScope!]
   credentials: String
   email: String!
   id: ID!
@@ -1164,7 +1215,7 @@ input UserCreateInput {
   password: String!
   role: UserRole
   createdBits: BitCreateManyWithoutCreatedByInput
-  createdRepositories: BitRepositoryCreateManyWithoutCreatedByInput
+  createdScopes: BitScopeCreateManyWithoutCreatedByInput
 }
 
 input UserCreateOneWithoutCreatedBitsInput {
@@ -1172,8 +1223,8 @@ input UserCreateOneWithoutCreatedBitsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutCreatedRepositoriesInput {
-  create: UserCreateWithoutCreatedRepositoriesInput
+input UserCreateOneWithoutCreatedScopesInput {
+  create: UserCreateWithoutCreatedScopesInput
   connect: UserWhereUniqueInput
 }
 
@@ -1183,10 +1234,10 @@ input UserCreateWithoutCreatedBitsInput {
   name: String!
   password: String!
   role: UserRole
-  createdRepositories: BitRepositoryCreateManyWithoutCreatedByInput
+  createdScopes: BitScopeCreateManyWithoutCreatedByInput
 }
 
-input UserCreateWithoutCreatedRepositoriesInput {
+input UserCreateWithoutCreatedScopesInput {
   credentials: String
   email: String!
   name: String!
@@ -1285,7 +1336,7 @@ input UserUpdateInput {
   password: String
   role: UserRole
   createdBits: BitUpdateManyWithoutCreatedByInput
-  createdRepositories: BitRepositoryUpdateManyWithoutCreatedByInput
+  createdScopes: BitScopeUpdateManyWithoutCreatedByInput
 }
 
 input UserUpdateOneRequiredWithoutCreatedBitsInput {
@@ -1295,11 +1346,11 @@ input UserUpdateOneRequiredWithoutCreatedBitsInput {
   upsert: UserUpsertWithoutCreatedBitsInput
 }
 
-input UserUpdateOneRequiredWithoutCreatedRepositoriesInput {
-  create: UserCreateWithoutCreatedRepositoriesInput
+input UserUpdateOneRequiredWithoutCreatedScopesInput {
+  create: UserCreateWithoutCreatedScopesInput
   connect: UserWhereUniqueInput
-  update: UserUpdateWithoutCreatedRepositoriesDataInput
-  upsert: UserUpsertWithoutCreatedRepositoriesInput
+  update: UserUpdateWithoutCreatedScopesDataInput
+  upsert: UserUpsertWithoutCreatedScopesInput
 }
 
 input UserUpdateWithoutCreatedBitsDataInput {
@@ -1308,10 +1359,10 @@ input UserUpdateWithoutCreatedBitsDataInput {
   name: String
   password: String
   role: UserRole
-  createdRepositories: BitRepositoryUpdateManyWithoutCreatedByInput
+  createdScopes: BitScopeUpdateManyWithoutCreatedByInput
 }
 
-input UserUpdateWithoutCreatedRepositoriesDataInput {
+input UserUpdateWithoutCreatedScopesDataInput {
   credentials: String
   email: String
   name: String
@@ -1325,9 +1376,9 @@ input UserUpsertWithoutCreatedBitsInput {
   create: UserCreateWithoutCreatedBitsInput!
 }
 
-input UserUpsertWithoutCreatedRepositoriesInput {
-  update: UserUpdateWithoutCreatedRepositoriesDataInput!
-  create: UserCreateWithoutCreatedRepositoriesInput!
+input UserUpsertWithoutCreatedScopesInput {
+  update: UserUpdateWithoutCreatedScopesDataInput!
+  create: UserCreateWithoutCreatedScopesInput!
 }
 
 input UserWhereInput {
@@ -1596,9 +1647,9 @@ input UserWhereInput {
   createdBits_every: BitWhereInput
   createdBits_some: BitWhereInput
   createdBits_none: BitWhereInput
-  createdRepositories_every: BitRepositoryWhereInput
-  createdRepositories_some: BitRepositoryWhereInput
-  createdRepositories_none: BitRepositoryWhereInput
+  createdScopes_every: BitScopeWhereInput
+  createdScopes_some: BitScopeWhereInput
+  createdScopes_none: BitScopeWhereInput
 }
 
 input UserWhereUniqueInput {

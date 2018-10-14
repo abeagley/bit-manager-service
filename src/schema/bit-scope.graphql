@@ -1,0 +1,5 @@
+input BitScopeCreateInput {
+  isLocal: Boolean!
+  name: String!
+  url: String
+}

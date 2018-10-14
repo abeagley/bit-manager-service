@@ -3,20 +3,21 @@ type Bit {
   createdBy: User! @relation(name: "UserCreatedBits")
   id: ID! @unique
   name: String!
-  repository: BitRepository! @relation(name: "BitRepositoryBits")
+  scope: BitScope! @relation(name: "BitScopeBits")
   updatedAt: DateTime!
   version: String!
 }
 
-type BitRepository {
-  bits: [Bit!]! @relation(name: "BitRepositoryBits")
+type BitScope {
+  bits: [Bit!]! @relation(name: "BitScopeBits")
   createdAt: DateTime!
-  createdBy: User! @relation(name: "UserCreatedBitRepos")
+  createdBy: User! @relation(name: "UserCreatedBitScopes")
   id: ID! @unique
-  isLocal: Boolean! @default(value: false)
+  isLocal: Boolean! @default(value: true)
   name: String! @unique
+  pathName: String! @unique
   updatedAt: DateTime!
-  url: String! @unique
+  url: String @unique
 }
 
 type Setting {
@@ -36,7 +37,7 @@ enum UserRole {
 type User {
   createdAt: DateTime!
   createdBits: [Bit!]! @relation(name: "UserCreatedBits")
-  createdRepositories: [BitRepository!]! @relation(name: "UserCreatedBitRepos")
+  createdScopes: [BitScope!]! @relation(name: "UserCreatedBitScopes")
   credentials: String
   email: String! @unique
   id: ID! @unique

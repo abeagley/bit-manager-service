@@ -1,23 +1,25 @@
 # import Bit, BitOrderByInput, BitWhereInput, BitWhereUniqueInput from '../generated/prisma/datamodel.graphql'
-# import BitRepository, BitRepositoryOrderByInput, BitRepositoryWhereInput, BitRepositoryWhereUniqueInput from '../generated/prisma/datamodel.graphql'
+# import BitScope, BitScopeOrderByInput, BitScopeWhereInput, BitScopeWhereUniqueInput from '../generated/prisma/datamodel.graphql'
 # import UserOrderByInput, UserRole, UserWhereInput, UserWhereUniqueInput from '../generated/prisma/datamodel.graphql'
 # import Setting, SettingCreateInput from '../generated/prisma/datamodel.graphql'
 
 # import InstallCreateInput, SanityCheck from './install.graphql'
 # import ApiUser, ApiUserCreateInput, ApiUserLoginInput, ApiUserLogin from './user.graphql'
+# import BitScopeCreateInput from './bit-scope.graphql'
 
 type Query {
   bit (where: BitWhereUniqueInput!): Bit
-  bits (where: BitWhereInput!, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]
-  bitRepository (where: BitRepositoryWhereUniqueInput!): BitRepository
-  bitRepositories (where: BitRepositoryWhereInput!, orderBy: BitRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitRepository]
+  bits (where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]
+  bitScope (where: BitScopeWhereUniqueInput!): BitScope
+  bitScopes (where: BitScopeWhereInput, orderBy: BitScopeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitScope]
   sanityCheck: SanityCheck
   settings: Setting
   user (where: UserWhereUniqueInput!): ApiUser
-  users (where: UserWhereInput!, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ApiUser]
+  users (where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ApiUser]
 }
 
 type Mutation {
+  createBitScope (data: BitScopeCreateInput!): BitScope
   createSettings (data: SettingCreateInput!): Setting
   createUser (data: ApiUserCreateInput!): ApiUser
   install (data: InstallCreateInput!): Setting

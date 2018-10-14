@@ -12,7 +12,7 @@ type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export interface Exists {
   bit: (where?: BitWhereInput) => Promise<boolean>;
-  bitRepository: (where?: BitRepositoryWhereInput) => Promise<boolean>;
+  bitScope: (where?: BitScopeWhereInput) => Promise<boolean>;
   setting: (where?: SettingWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -60,29 +60,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => BitConnection;
-  bitRepository: (where: BitRepositoryWhereUniqueInput) => BitRepository;
-  bitRepositories: (
+  bitScope: (where: BitScopeWhereUniqueInput) => BitScope;
+  bitScopes: (
     args?: {
-      where?: BitRepositoryWhereInput;
-      orderBy?: BitRepositoryOrderByInput;
+      where?: BitScopeWhereInput;
+      orderBy?: BitScopeOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
     }
-  ) => FragmentableArray<BitRepositoryNode>;
-  bitRepositoriesConnection: (
+  ) => FragmentableArray<BitScopeNode>;
+  bitScopesConnection: (
     args?: {
-      where?: BitRepositoryWhereInput;
-      orderBy?: BitRepositoryOrderByInput;
+      where?: BitScopeWhereInput;
+      orderBy?: BitScopeOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
     }
-  ) => BitRepositoryConnection;
+  ) => BitScopeConnection;
   setting: (where: SettingWhereUniqueInput) => Setting;
   settings: (
     args?: {
@@ -151,25 +151,22 @@ export interface Prisma {
   ) => Bit;
   deleteBit: (where: BitWhereUniqueInput) => Bit;
   deleteManyBits: (where?: BitWhereInput) => BatchPayload;
-  createBitRepository: (data: BitRepositoryCreateInput) => BitRepository;
-  updateBitRepository: (
-    args: {
-      data: BitRepositoryUpdateInput;
-      where: BitRepositoryWhereUniqueInput;
-    }
-  ) => BitRepository;
-  updateManyBitRepositories: (
-    args: { data: BitRepositoryUpdateInput; where?: BitRepositoryWhereInput }
+  createBitScope: (data: BitScopeCreateInput) => BitScope;
+  updateBitScope: (
+    args: { data: BitScopeUpdateInput; where: BitScopeWhereUniqueInput }
+  ) => BitScope;
+  updateManyBitScopes: (
+    args: { data: BitScopeUpdateInput; where?: BitScopeWhereInput }
   ) => BatchPayload;
-  upsertBitRepository: (
+  upsertBitScope: (
     args: {
-      where: BitRepositoryWhereUniqueInput;
-      create: BitRepositoryCreateInput;
-      update: BitRepositoryUpdateInput;
+      where: BitScopeWhereUniqueInput;
+      create: BitScopeCreateInput;
+      update: BitScopeUpdateInput;
     }
-  ) => BitRepository;
-  deleteBitRepository: (where: BitRepositoryWhereUniqueInput) => BitRepository;
-  deleteManyBitRepositories: (where?: BitRepositoryWhereInput) => BatchPayload;
+  ) => BitScope;
+  deleteBitScope: (where: BitScopeWhereUniqueInput) => BitScope;
+  deleteManyBitScopes: (where?: BitScopeWhereInput) => BatchPayload;
   createSetting: (data: SettingCreateInput) => Setting;
   updateSetting: (
     args: { data: SettingUpdateInput; where: SettingWhereUniqueInput }
@@ -214,9 +211,9 @@ export interface Subscription {
   bit: (
     where?: BitSubscriptionWhereInput
   ) => BitSubscriptionPayloadSubscription;
-  bitRepository: (
-    where?: BitRepositorySubscriptionWhereInput
-  ) => BitRepositorySubscriptionPayloadSubscription;
+  bitScope: (
+    where?: BitScopeSubscriptionWhereInput
+  ) => BitScopeSubscriptionPayloadSubscription;
   setting: (
     where?: SettingSubscriptionWhereInput
   ) => SettingSubscriptionPayloadSubscription;
@@ -247,7 +244,7 @@ export type BitOrderByInput =
   | "version_ASC"
   | "version_DESC";
 
-export type BitRepositoryOrderByInput =
+export type BitScopeOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "id_ASC"
@@ -256,6 +253,8 @@ export type BitRepositoryOrderByInput =
   | "isLocal_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "pathName_ASC"
+  | "pathName_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "url_ASC"
@@ -295,7 +294,7 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserCreateWithoutCreatedRepositoriesInput {
+export interface UserCreateWithoutCreatedScopesInput {
   createdBits?: BitCreateManyWithoutCreatedByInput;
   credentials?: String;
   email: String;
@@ -323,7 +322,7 @@ export interface UserUpdateOneRequiredWithoutCreatedBitsInput {
 export interface BitCreateInput {
   createdBy: UserCreateOneWithoutCreatedBitsInput;
   name: String;
-  repository: BitRepositoryCreateOneWithoutBitsInput;
+  scope: BitScopeCreateOneWithoutBitsInput;
   version: String;
 }
 
@@ -339,9 +338,9 @@ export interface UserWhereInput {
   createdBits_every?: BitWhereInput;
   createdBits_some?: BitWhereInput;
   createdBits_none?: BitWhereInput;
-  createdRepositories_every?: BitRepositoryWhereInput;
-  createdRepositories_some?: BitRepositoryWhereInput;
-  createdRepositories_none?: BitRepositoryWhereInput;
+  createdScopes_every?: BitScopeWhereInput;
+  createdScopes_some?: BitScopeWhereInput;
+  createdScopes_none?: BitScopeWhereInput;
   credentials?: String;
   credentials_not?: String;
   credentials_in?: String[] | String;
@@ -472,7 +471,7 @@ export interface BitWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
-  repository?: BitRepositoryWhereInput;
+  scope?: BitScopeWhereInput;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -501,7 +500,7 @@ export interface BitWhereInput {
 }
 
 export interface UserCreateWithoutCreatedBitsInput {
-  createdRepositories?: BitRepositoryCreateManyWithoutCreatedByInput;
+  createdScopes?: BitScopeCreateManyWithoutCreatedByInput;
   credentials?: String;
   email: String;
   name: String;
@@ -509,33 +508,27 @@ export interface UserCreateWithoutCreatedBitsInput {
   role?: UserRole;
 }
 
-export interface BitRepositorySubscriptionWhereInput {
+export interface BitScopeSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: BitRepositoryWhereInput;
-  AND?:
-    | BitRepositorySubscriptionWhereInput[]
-    | BitRepositorySubscriptionWhereInput;
-  OR?:
-    | BitRepositorySubscriptionWhereInput[]
-    | BitRepositorySubscriptionWhereInput;
-  NOT?:
-    | BitRepositorySubscriptionWhereInput[]
-    | BitRepositorySubscriptionWhereInput;
+  node?: BitScopeWhereInput;
+  AND?: BitScopeSubscriptionWhereInput[] | BitScopeSubscriptionWhereInput;
+  OR?: BitScopeSubscriptionWhereInput[] | BitScopeSubscriptionWhereInput;
+  NOT?: BitScopeSubscriptionWhereInput[] | BitScopeSubscriptionWhereInput;
 }
 
-export interface BitRepositoryCreateManyWithoutCreatedByInput {
+export interface BitScopeCreateManyWithoutCreatedByInput {
   create?:
-    | BitRepositoryCreateWithoutCreatedByInput[]
-    | BitRepositoryCreateWithoutCreatedByInput;
-  connect?: BitRepositoryWhereUniqueInput[] | BitRepositoryWhereUniqueInput;
+    | BitScopeCreateWithoutCreatedByInput[]
+    | BitScopeCreateWithoutCreatedByInput;
+  connect?: BitScopeWhereUniqueInput[] | BitScopeWhereUniqueInput;
 }
 
 export interface UserUpdateInput {
   createdBits?: BitUpdateManyWithoutCreatedByInput;
-  createdRepositories?: BitRepositoryUpdateManyWithoutCreatedByInput;
+  createdScopes?: BitScopeUpdateManyWithoutCreatedByInput;
   credentials?: String;
   email?: String;
   name?: String;
@@ -543,21 +536,23 @@ export interface UserUpdateInput {
   role?: UserRole;
 }
 
-export interface BitRepositoryCreateWithoutCreatedByInput {
-  bits?: BitCreateManyWithoutRepositoryInput;
+export interface BitScopeCreateWithoutCreatedByInput {
+  bits?: BitCreateManyWithoutScopeInput;
   isLocal?: Boolean;
   name: String;
-  url: String;
+  pathName: String;
+  url?: String;
 }
 
-export type BitRepositoryWhereUniqueInput = AtLeastOne<{
+export type BitScopeWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   name?: String;
+  pathName?: String;
   url?: String;
 }>;
 
-export interface BitCreateManyWithoutRepositoryInput {
-  create?: BitCreateWithoutRepositoryInput[] | BitCreateWithoutRepositoryInput;
+export interface BitCreateManyWithoutScopeInput {
+  create?: BitCreateWithoutScopeInput[] | BitCreateWithoutScopeInput;
   connect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
 }
 
@@ -567,7 +562,7 @@ export interface SettingCreateInput {
   installed?: Boolean;
 }
 
-export interface BitCreateWithoutRepositoryInput {
+export interface BitCreateWithoutScopeInput {
   createdBy: UserCreateOneWithoutCreatedBitsInput;
   name: String;
   version: String;
@@ -579,9 +574,9 @@ export type SettingWhereUniqueInput = AtLeastOne<{
   id?: ID_Input;
 }>;
 
-export interface BitRepositoryCreateOneWithoutBitsInput {
-  create?: BitRepositoryCreateWithoutBitsInput;
-  connect?: BitRepositoryWhereUniqueInput;
+export interface BitScopeCreateOneWithoutBitsInput {
+  create?: BitScopeCreateWithoutBitsInput;
+  connect?: BitScopeWhereUniqueInput;
 }
 
 export interface SettingWhereInput {
@@ -650,33 +645,35 @@ export interface SettingWhereInput {
   NOT?: SettingWhereInput[] | SettingWhereInput;
 }
 
-export interface BitRepositoryCreateWithoutBitsInput {
-  createdBy: UserCreateOneWithoutCreatedRepositoriesInput;
+export interface BitScopeCreateWithoutBitsInput {
+  createdBy: UserCreateOneWithoutCreatedScopesInput;
   isLocal?: Boolean;
   name: String;
-  url: String;
+  pathName: String;
+  url?: String;
 }
 
-export interface UserUpsertWithoutCreatedRepositoriesInput {
-  update: UserUpdateWithoutCreatedRepositoriesDataInput;
-  create: UserCreateWithoutCreatedRepositoriesInput;
+export interface UserUpsertWithoutCreatedScopesInput {
+  update: UserUpdateWithoutCreatedScopesDataInput;
+  create: UserCreateWithoutCreatedScopesInput;
 }
 
-export interface UserCreateOneWithoutCreatedRepositoriesInput {
-  create?: UserCreateWithoutCreatedRepositoriesInput;
+export interface UserCreateOneWithoutCreatedScopesInput {
+  create?: UserCreateWithoutCreatedScopesInput;
   connect?: UserWhereUniqueInput;
 }
 
 export interface BitUpdateWithoutCreatedByDataInput {
   name?: String;
-  repository?: BitRepositoryUpdateOneRequiredWithoutBitsInput;
+  scope?: BitScopeUpdateOneRequiredWithoutBitsInput;
   version?: String;
 }
 
-export interface BitRepositoryUpdateWithoutBitsDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutCreatedRepositoriesInput;
+export interface BitScopeUpdateWithoutBitsDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutCreatedScopesInput;
   isLocal?: Boolean;
   name?: String;
+  pathName?: String;
   url?: String;
 }
 
@@ -690,7 +687,7 @@ export interface BitCreateManyWithoutCreatedByInput {
   connect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
 }
 
-export interface UserUpdateWithoutCreatedRepositoriesDataInput {
+export interface UserUpdateWithoutCreatedScopesDataInput {
   createdBits?: BitUpdateManyWithoutCreatedByInput;
   credentials?: String;
   email?: String;
@@ -701,11 +698,11 @@ export interface UserUpdateWithoutCreatedRepositoriesDataInput {
 
 export interface BitCreateWithoutCreatedByInput {
   name: String;
-  repository: BitRepositoryCreateOneWithoutBitsInput;
+  scope: BitScopeCreateOneWithoutBitsInput;
   version: String;
 }
 
-export interface BitRepositoryWhereInput {
+export interface BitScopeWhereInput {
   bits_every?: BitWhereInput;
   bits_some?: BitWhereInput;
   bits_none?: BitWhereInput;
@@ -748,6 +745,20 @@ export interface BitRepositoryWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  pathName?: String;
+  pathName_not?: String;
+  pathName_in?: String[] | String;
+  pathName_not_in?: String[] | String;
+  pathName_lt?: String;
+  pathName_lte?: String;
+  pathName_gt?: String;
+  pathName_gte?: String;
+  pathName_contains?: String;
+  pathName_not_contains?: String;
+  pathName_starts_with?: String;
+  pathName_not_starts_with?: String;
+  pathName_ends_with?: String;
+  pathName_not_ends_with?: String;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -770,15 +781,15 @@ export interface BitRepositoryWhereInput {
   url_not_starts_with?: String;
   url_ends_with?: String;
   url_not_ends_with?: String;
-  AND?: BitRepositoryWhereInput[] | BitRepositoryWhereInput;
-  OR?: BitRepositoryWhereInput[] | BitRepositoryWhereInput;
-  NOT?: BitRepositoryWhereInput[] | BitRepositoryWhereInput;
+  AND?: BitScopeWhereInput[] | BitScopeWhereInput;
+  OR?: BitScopeWhereInput[] | BitScopeWhereInput;
+  NOT?: BitScopeWhereInput[] | BitScopeWhereInput;
 }
 
 export interface BitUpdateInput {
   createdBy?: UserUpdateOneRequiredWithoutCreatedBitsInput;
   name?: String;
-  repository?: BitRepositoryUpdateOneRequiredWithoutBitsInput;
+  scope?: BitScopeUpdateOneRequiredWithoutBitsInput;
   version?: String;
 }
 
@@ -793,16 +804,16 @@ export interface SettingSubscriptionWhereInput {
   NOT?: SettingSubscriptionWhereInput[] | SettingSubscriptionWhereInput;
 }
 
-export interface BitRepositoryUpdateOneRequiredWithoutBitsInput {
-  create?: BitRepositoryCreateWithoutBitsInput;
-  update?: BitRepositoryUpdateWithoutBitsDataInput;
-  upsert?: BitRepositoryUpsertWithoutBitsInput;
-  connect?: BitRepositoryWhereUniqueInput;
+export interface BitScopeUpdateOneRequiredWithoutBitsInput {
+  create?: BitScopeCreateWithoutBitsInput;
+  update?: BitScopeUpdateWithoutBitsDataInput;
+  upsert?: BitScopeUpsertWithoutBitsInput;
+  connect?: BitScopeWhereUniqueInput;
 }
 
 export interface UserCreateInput {
   createdBits?: BitCreateManyWithoutCreatedByInput;
-  createdRepositories?: BitRepositoryCreateManyWithoutCreatedByInput;
+  createdScopes?: BitScopeCreateManyWithoutCreatedByInput;
   credentials?: String;
   email: String;
   name: String;
@@ -811,7 +822,7 @@ export interface UserCreateInput {
 }
 
 export interface UserUpdateWithoutCreatedBitsDataInput {
-  createdRepositories?: BitRepositoryUpdateManyWithoutCreatedByInput;
+  createdScopes?: BitScopeUpdateManyWithoutCreatedByInput;
   credentials?: String;
   email?: String;
   name?: String;
@@ -819,37 +830,38 @@ export interface UserUpdateWithoutCreatedBitsDataInput {
   role?: UserRole;
 }
 
-export interface BitRepositoryUpdateInput {
-  bits?: BitUpdateManyWithoutRepositoryInput;
-  createdBy?: UserUpdateOneRequiredWithoutCreatedRepositoriesInput;
+export interface BitScopeUpdateInput {
+  bits?: BitUpdateManyWithoutScopeInput;
+  createdBy?: UserUpdateOneRequiredWithoutCreatedScopesInput;
   isLocal?: Boolean;
   name?: String;
+  pathName?: String;
   url?: String;
 }
 
-export interface BitRepositoryUpdateManyWithoutCreatedByInput {
+export interface BitScopeUpdateManyWithoutCreatedByInput {
   create?:
-    | BitRepositoryCreateWithoutCreatedByInput[]
-    | BitRepositoryCreateWithoutCreatedByInput;
-  delete?: BitRepositoryWhereUniqueInput[] | BitRepositoryWhereUniqueInput;
-  connect?: BitRepositoryWhereUniqueInput[] | BitRepositoryWhereUniqueInput;
-  disconnect?: BitRepositoryWhereUniqueInput[] | BitRepositoryWhereUniqueInput;
+    | BitScopeCreateWithoutCreatedByInput[]
+    | BitScopeCreateWithoutCreatedByInput;
+  delete?: BitScopeWhereUniqueInput[] | BitScopeWhereUniqueInput;
+  connect?: BitScopeWhereUniqueInput[] | BitScopeWhereUniqueInput;
+  disconnect?: BitScopeWhereUniqueInput[] | BitScopeWhereUniqueInput;
   update?:
-    | BitRepositoryUpdateWithWhereUniqueWithoutCreatedByInput[]
-    | BitRepositoryUpdateWithWhereUniqueWithoutCreatedByInput;
+    | BitScopeUpdateWithWhereUniqueWithoutCreatedByInput[]
+    | BitScopeUpdateWithWhereUniqueWithoutCreatedByInput;
   upsert?:
-    | BitRepositoryUpsertWithWhereUniqueWithoutCreatedByInput[]
-    | BitRepositoryUpsertWithWhereUniqueWithoutCreatedByInput;
+    | BitScopeUpsertWithWhereUniqueWithoutCreatedByInput[]
+    | BitScopeUpsertWithWhereUniqueWithoutCreatedByInput;
 }
 
-export interface BitRepositoryUpsertWithoutBitsInput {
-  update: BitRepositoryUpdateWithoutBitsDataInput;
-  create: BitRepositoryCreateWithoutBitsInput;
+export interface BitScopeUpsertWithoutBitsInput {
+  update: BitScopeUpdateWithoutBitsDataInput;
+  create: BitScopeCreateWithoutBitsInput;
 }
 
-export interface BitRepositoryUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: BitRepositoryWhereUniqueInput;
-  data: BitRepositoryUpdateWithoutCreatedByDataInput;
+export interface BitScopeUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: BitScopeWhereUniqueInput;
+  data: BitScopeUpdateWithoutCreatedByDataInput;
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
@@ -857,31 +869,32 @@ export type UserWhereUniqueInput = AtLeastOne<{
   id?: ID_Input;
 }>;
 
-export interface BitRepositoryUpdateWithoutCreatedByDataInput {
-  bits?: BitUpdateManyWithoutRepositoryInput;
+export interface BitScopeUpdateWithoutCreatedByDataInput {
+  bits?: BitUpdateManyWithoutScopeInput;
   isLocal?: Boolean;
   name?: String;
+  pathName?: String;
   url?: String;
 }
 
-export interface UserUpdateOneRequiredWithoutCreatedRepositoriesInput {
-  create?: UserCreateWithoutCreatedRepositoriesInput;
-  update?: UserUpdateWithoutCreatedRepositoriesDataInput;
-  upsert?: UserUpsertWithoutCreatedRepositoriesInput;
+export interface UserUpdateOneRequiredWithoutCreatedScopesInput {
+  create?: UserCreateWithoutCreatedScopesInput;
+  update?: UserUpdateWithoutCreatedScopesDataInput;
+  upsert?: UserUpsertWithoutCreatedScopesInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface BitUpdateManyWithoutRepositoryInput {
-  create?: BitCreateWithoutRepositoryInput[] | BitCreateWithoutRepositoryInput;
+export interface BitUpdateManyWithoutScopeInput {
+  create?: BitCreateWithoutScopeInput[] | BitCreateWithoutScopeInput;
   delete?: BitWhereUniqueInput[] | BitWhereUniqueInput;
   connect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
   disconnect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
   update?:
-    | BitUpdateWithWhereUniqueWithoutRepositoryInput[]
-    | BitUpdateWithWhereUniqueWithoutRepositoryInput;
+    | BitUpdateWithWhereUniqueWithoutScopeInput[]
+    | BitUpdateWithWhereUniqueWithoutScopeInput;
   upsert?:
-    | BitUpsertWithWhereUniqueWithoutRepositoryInput[]
-    | BitUpsertWithWhereUniqueWithoutRepositoryInput;
+    | BitUpsertWithWhereUniqueWithoutScopeInput[]
+    | BitUpsertWithWhereUniqueWithoutScopeInput;
 }
 
 export interface BitSubscriptionWhereInput {
@@ -895,27 +908,27 @@ export interface BitSubscriptionWhereInput {
   NOT?: BitSubscriptionWhereInput[] | BitSubscriptionWhereInput;
 }
 
-export interface BitRepositoryUpsertWithWhereUniqueWithoutCreatedByInput {
-  where: BitRepositoryWhereUniqueInput;
-  update: BitRepositoryUpdateWithoutCreatedByDataInput;
-  create: BitRepositoryCreateWithoutCreatedByInput;
+export interface BitScopeUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: BitScopeWhereUniqueInput;
+  update: BitScopeUpdateWithoutCreatedByDataInput;
+  create: BitScopeCreateWithoutCreatedByInput;
 }
 
-export interface BitUpsertWithWhereUniqueWithoutRepositoryInput {
+export interface BitUpsertWithWhereUniqueWithoutScopeInput {
   where: BitWhereUniqueInput;
-  update: BitUpdateWithoutRepositoryDataInput;
-  create: BitCreateWithoutRepositoryInput;
+  update: BitUpdateWithoutScopeDataInput;
+  create: BitCreateWithoutScopeInput;
 }
 
-export interface BitUpdateWithoutRepositoryDataInput {
+export interface BitUpdateWithoutScopeDataInput {
   createdBy?: UserUpdateOneRequiredWithoutCreatedBitsInput;
   name?: String;
   version?: String;
 }
 
-export interface BitUpdateWithWhereUniqueWithoutRepositoryInput {
+export interface BitUpdateWithWhereUniqueWithoutScopeInput {
   where: BitWhereUniqueInput;
-  data: BitUpdateWithoutRepositoryDataInput;
+  data: BitUpdateWithoutScopeDataInput;
 }
 
 export interface SettingUpdateInput {
@@ -954,12 +967,13 @@ export interface BitUpsertWithWhereUniqueWithoutCreatedByInput {
   create: BitCreateWithoutCreatedByInput;
 }
 
-export interface BitRepositoryCreateInput {
-  bits?: BitCreateManyWithoutRepositoryInput;
-  createdBy: UserCreateOneWithoutCreatedRepositoriesInput;
+export interface BitScopeCreateInput {
+  bits?: BitCreateManyWithoutScopeInput;
+  createdBy: UserCreateOneWithoutCreatedScopesInput;
   isLocal?: Boolean;
   name: String;
-  url: String;
+  pathName: String;
+  url?: String;
 }
 
 export interface NodeNode {
@@ -1003,34 +1017,33 @@ export interface UserPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AggregateBitRepositoryNode {
+export interface AggregateBitScopeNode {
   count: Int;
 }
 
-export interface AggregateBitRepository
-  extends Promise<AggregateBitRepositoryNode>,
+export interface AggregateBitScope
+  extends Promise<AggregateBitScopeNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateBitRepositorySubscription
-  extends Promise<AsyncIterator<AggregateBitRepositoryNode>>,
+export interface AggregateBitScopeSubscription
+  extends Promise<AsyncIterator<AggregateBitScopeNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface BitRepositoryNode {
+export interface BitScopeNode {
   createdAt: DateTimeOutput;
   id: ID_Output;
   isLocal: Boolean;
   name: String;
+  pathName: String;
   updatedAt: DateTimeOutput;
-  url: String;
+  url?: String;
 }
 
-export interface BitRepository
-  extends Promise<BitRepositoryNode>,
-    Fragmentable {
+export interface BitScope extends Promise<BitScopeNode>, Fragmentable {
   bits: <T = FragmentableArray<BitNode>>(
     args?: {
       where?: BitWhereInput;
@@ -1047,12 +1060,13 @@ export interface BitRepository
   id: () => Promise<ID_Output>;
   isLocal: () => Promise<Boolean>;
   name: () => Promise<String>;
+  pathName: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
   url: () => Promise<String>;
 }
 
-export interface BitRepositorySubscription
-  extends Promise<AsyncIterator<BitRepositoryNode>>,
+export interface BitScopeSubscription
+  extends Promise<AsyncIterator<BitScopeNode>>,
     Fragmentable {
   bits: <T = Promise<AsyncIterator<BitSubscription>>>(
     args?: {
@@ -1070,44 +1084,43 @@ export interface BitRepositorySubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   isLocal: () => Promise<AsyncIterator<Boolean>>;
   name: () => Promise<AsyncIterator<String>>;
+  pathName: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   url: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BitRepositoryEdgeNode {
+export interface BitScopeEdgeNode {
   cursor: String;
 }
 
-export interface BitRepositoryEdge
-  extends Promise<BitRepositoryEdgeNode>,
-    Fragmentable {
-  node: <T = BitRepository>() => T;
+export interface BitScopeEdge extends Promise<BitScopeEdgeNode>, Fragmentable {
+  node: <T = BitScope>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface BitRepositoryEdgeSubscription
-  extends Promise<AsyncIterator<BitRepositoryEdgeNode>>,
+export interface BitScopeEdgeSubscription
+  extends Promise<AsyncIterator<BitScopeEdgeNode>>,
     Fragmentable {
-  node: <T = BitRepositorySubscription>() => T;
+  node: <T = BitScopeSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BitRepositoryConnectionNode {}
+export interface BitScopeConnectionNode {}
 
-export interface BitRepositoryConnection
-  extends Promise<BitRepositoryConnectionNode>,
+export interface BitScopeConnection
+  extends Promise<BitScopeConnectionNode>,
     Fragmentable {
   pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<BitRepositoryEdgeNode>>() => T;
-  aggregate: <T = AggregateBitRepository>() => T;
+  edges: <T = FragmentableArray<BitScopeEdgeNode>>() => T;
+  aggregate: <T = AggregateBitScope>() => T;
 }
 
-export interface BitRepositoryConnectionSubscription
-  extends Promise<AsyncIterator<BitRepositoryConnectionNode>>,
+export interface BitScopeConnectionSubscription
+  extends Promise<AsyncIterator<BitScopeConnectionNode>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BitRepositoryEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBitRepositorySubscription>() => T;
+  edges: <T = Promise<AsyncIterator<BitScopeEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateBitScopeSubscription>() => T;
 }
 
 export interface SettingSubscriptionPayloadNode {
@@ -1265,10 +1278,10 @@ export interface User extends Promise<UserNode>, Fragmentable {
       last?: Int;
     }
   ) => T;
-  createdRepositories: <T = FragmentableArray<BitRepositoryNode>>(
+  createdScopes: <T = FragmentableArray<BitScopeNode>>(
     args?: {
-      where?: BitRepositoryWhereInput;
-      orderBy?: BitRepositoryOrderByInput;
+      where?: BitScopeWhereInput;
+      orderBy?: BitScopeOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -1300,10 +1313,10 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
-  createdRepositories: <T = Promise<AsyncIterator<BitRepositorySubscription>>>(
+  createdScopes: <T = Promise<AsyncIterator<BitScopeSubscription>>>(
     args?: {
-      where?: BitRepositoryWhereInput;
-      orderBy?: BitRepositoryOrderByInput;
+      where?: BitScopeWhereInput;
+      orderBy?: BitScopeOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -1333,7 +1346,7 @@ export interface Bit extends Promise<BitNode>, Fragmentable {
   createdBy: <T = User>() => T;
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  repository: <T = BitRepository>() => T;
+  scope: <T = BitScope>() => T;
   updatedAt: () => Promise<DateTimeOutput>;
   version: () => Promise<String>;
 }
@@ -1345,7 +1358,7 @@ export interface BitSubscription
   createdBy: <T = UserSubscription>() => T;
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  repository: <T = BitRepositorySubscription>() => T;
+  scope: <T = BitScopeSubscription>() => T;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   version: () => Promise<AsyncIterator<String>>;
 }
@@ -1436,58 +1449,61 @@ export interface AggregateSettingSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface BitRepositoryPreviousValuesNode {
+export interface BitScopePreviousValuesNode {
   createdAt: DateTimeOutput;
   id: ID_Output;
   isLocal: Boolean;
   name: String;
+  pathName: String;
   updatedAt: DateTimeOutput;
-  url: String;
+  url?: String;
 }
 
-export interface BitRepositoryPreviousValues
-  extends Promise<BitRepositoryPreviousValuesNode>,
+export interface BitScopePreviousValues
+  extends Promise<BitScopePreviousValuesNode>,
     Fragmentable {
   createdAt: () => Promise<DateTimeOutput>;
   id: () => Promise<ID_Output>;
   isLocal: () => Promise<Boolean>;
   name: () => Promise<String>;
+  pathName: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
   url: () => Promise<String>;
 }
 
-export interface BitRepositoryPreviousValuesSubscription
-  extends Promise<AsyncIterator<BitRepositoryPreviousValuesNode>>,
+export interface BitScopePreviousValuesSubscription
+  extends Promise<AsyncIterator<BitScopePreviousValuesNode>>,
     Fragmentable {
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   id: () => Promise<AsyncIterator<ID_Output>>;
   isLocal: () => Promise<AsyncIterator<Boolean>>;
   name: () => Promise<AsyncIterator<String>>;
+  pathName: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   url: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BitRepositorySubscriptionPayloadNode {
+export interface BitScopeSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface BitRepositorySubscriptionPayload
-  extends Promise<BitRepositorySubscriptionPayloadNode>,
+export interface BitScopeSubscriptionPayload
+  extends Promise<BitScopeSubscriptionPayloadNode>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = BitRepository>() => T;
+  node: <T = BitScope>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = BitRepositoryPreviousValues>() => T;
+  previousValues: <T = BitScopePreviousValues>() => T;
 }
 
-export interface BitRepositorySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<BitRepositorySubscriptionPayloadNode>>,
+export interface BitScopeSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<BitScopeSubscriptionPayloadNode>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = BitRepositorySubscription>() => T;
+  node: <T = BitScopeSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = BitRepositoryPreviousValuesSubscription>() => T;
+  previousValues: <T = BitScopePreviousValuesSubscription>() => T;
 }
 
 export interface BitConnectionNode {}
@@ -1654,6 +1670,6 @@ export type ID_Output = string;
 
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
-  endpoint: `http://localhost:4466`
+  endpoint: `http://bm_prisma:4466`
 });
 export const prisma = new Prisma();

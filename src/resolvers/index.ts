@@ -1,13 +1,13 @@
 import { merge } from 'lodash'
 
-import BitRepositoriesResolver from './bit-repositories'
+import BitScopesResolver from './bit-scopes'
 import BitsResolver from './bits'
 import InstallResolver from './install'
 import SettingsResolver from './settings'
 import UsersResolver from './users'
 
 export default merge(
-  BitRepositoriesResolver,
+  BitScopesResolver,
   BitsResolver,
   InstallResolver,
   SettingsResolver,
