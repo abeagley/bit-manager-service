@@ -1,6 +1,8 @@
 FROM ubuntu:18.04
 MAINTAINER Aric Beagley "https://github.com/abeagley"
 EXPOSE 22 4000
+VOLUME /scopes
+VOLUME /home/bit/.ssh
 VOLUME /home/bit/server
 
 # Main setup
@@ -18,10 +20,6 @@ RUN groupadd -g 8080 bit && useradd -r -u 1001 -g bit bit && usermod -s /bin/bas
 
 # SSHD Setup
 RUN mkdir -p /var/run/sshd && \
-    mkdir -p /var/run/bit && \
-    mkdir -p /home/bit/.ssh && \
-    mkdir -p /home/bit/.bit-init && \
-    mkdir -p /scopes && \
     touch /home/bit/.ssh/authorized_keys && \
     chown -R bit:bit /home/bit && \
     chown -R bit:bit /scopes && \
@@ -34,7 +32,7 @@ RUN mkdir -p /var/run/sshd && \
 # Node Environment Setup
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt install nodejs -y && \
-    npm i -g npm && \
+    npm i -g npm npx && \
     npm i -g yarn bit-bin --unsafe
 
 # Cleanup
@@ -44,9 +42,7 @@ RUN apt-get clean && \
 WORKDIR /home/bit/server
 USER bit
 ENV PATH="${PATH}:/usr/libexec/lib/node_modules/npm/bin:/usr/bin/node_modules/npm/bin:/usr/local/lib/node_modules/bin"
-RUN mkdir -p /home/bit/.ssh  && \
-    touch /home/bit/.ssh/authorized_keys && \
-    bit config set analytics_reporting false && \
+RUN bit config set analytics_reporting false && \
     bit config set user.name BitManager && \
     bit config set user.email bitmanager@localhost.local && \
     git config --global user.name BitManager && \

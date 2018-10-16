@@ -9,6 +9,7 @@
   "private": false,
   "scripts": {
     "docker": "npm rebuild bcrypt --build-from-source && yarn run gen-types && yarn start",
+    "docker:start": "docker-compose up --no-recreate",
     "gen-types": "yarn run gen-types:prisma && yarn run gen-types:graphql",
     "gen-types:graphql": "graphql get-schema --project database",
     "gen-types:prisma": "cd prisma && prisma deploy",

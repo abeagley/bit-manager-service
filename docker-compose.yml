@@ -4,8 +4,6 @@ services:
     depends_on:
       - bm_mysql
     image: prismagraphql/prisma:1.17
-    logging:
-      driver: none
     restart: always
     ports:
     - "4466:4466"
@@ -41,6 +39,8 @@ services:
       - "2222:22"
       - "4000:4000"
     volumes:
+      - "~/.bit-docker:/scopes"
+      - "~/.bit-access-keys:/home/bit/.ssh"
       - ".:/home/bit/server"
 volumes:
   mysql:

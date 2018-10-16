@@ -1,55 +1,92 @@
-import * as execSh from 'shell-exec'
 import { resolve as pathResolve } from 'path'
 
 import { IContext } from '../context'
-import { BitScope, BitScopeNode, BitScopeWhereInput, BitScopeWhereUniqueInput } from '../generated/prisma'
+import {
+  BitScopeNode,
+  BitScopeWhereInput,
+  BitScopeWhereUniqueInput
+} from '../generated/prisma'
 import { ICreateArgs, IWhereArgs } from '../helpers/arg-types'
-import getEnv from '../helpers/env'
 import { makePathName } from '../helpers/make-path-name'
-import { getShellOptions } from '../helpers/shell-options'
 
 import { pathExists } from 'fs-extra'
-import { initScope as bitInit } from 'bit-bin/dist/api/scope'
+import { initScope as bitScopeInit } from 'bit-bin/dist/api/scope'
+import { asyncForEach } from '../helpers/async-for-each'
 
 const { BIT_HOME } = process.env
 
 export interface BitScopeCreateInput {
+  description: string
   isLocal: boolean
   name: string
   url?: string
 }
 
+export interface BitScopeNodeCount extends BitScopeNode {
+  bitCount: number
+}
+
 export default {
   Query: {
     async bitScope (_root: any, args: IWhereArgs<BitScopeWhereUniqueInput>, ctx: IContext)
-      : Promise<BitScopeNode | null> {
-      const bitScope = await ctx.db.bitScope(args.where)
+      : Promise<BitScopeNodeCount | null> {
+      let bitScope = null
+
+      try {
+        bitScope = await ctx.db.bitScope(args.where).bits()
+
+        if (!bitScope) {
+          throw new Error('Unable to find scope')
+        }
+
+        bitScope.bitCount = await ctx.db.bitsConnection({
+          where: {
+            scope: {
+              id: bitScope.id
+            }
+          }
+        }).aggregate().count()
+      } catch (e) {
+        console.error(e)
+        throw new Error('Unable to find scope')
+      }
+
       return bitScope
     },
 
     async bitScopes (_root: any, args: IWhereArgs<BitScopeWhereInput>, ctx: IContext)
-      : Promise<BitScopeNode[]> {
+      : Promise<BitScopeNodeCount[]> {
+      let bitScopes = []
+
       try {
-        const ENV = await getEnv()
-        const shellOpts = getShellOptions(ENV.BIT_PATH, true)
-        const shell = await execSh(`bit list`, shellOpts)
-        console.log(shell.stdout)
+        bitScopes = await ctx.db.bitScopes(args)
+
+        await asyncForEach<BitScopeNode>(bitScopes, async (scope) => {
+          const bitCount = await ctx.db.bitsConnection({
+            where: {
+              scope: {
+                id: scope.id
+              }
+            }
+          }).aggregate().count()
+
+          scope.bitCount = bitCount
+        })
       } catch (e) {
         console.error(e)
         throw new Error('Unable to create scope')
       }
 
-      const bitScopes = await ctx.db.bitScopes(args)
       return bitScopes
     }
   },
 
   Mutation: {
     async createBitScope (_root: any, args: ICreateArgs<BitScopeCreateInput>, ctx: IContext)
-      : Promise<BitScopeNode | null> {
+      : Promise<BitScopeNodeCount | null> {
       const input = args.data
 
-      let bitScope: BitScope | null = null
+      let bitScopeWithCount: BitScopeNodeCount | null = null
       let bitPkgName: string
 
       try {
@@ -58,33 +95,30 @@ export default {
         const exists = await pathExists(path)
 
         if (exists) {
-          throw new Error('Bit folder already exists')
+          throw new Error('Bit scope folder already exists')
         }
 
-        await bitInit(path, bitPkgName, null)
-      } catch (e) {
-        console.error(e)
-        throw new Error('Unable to create scope')
-      }
-
-      try {
-        bitScope = ctx.db.createBitScope({
-          createdBy: {
-            connect: {
-              email: 'abeagley@bastionweb.io'
-            }
-          },
+        const bitScope = await ctx.db.createBitScope({
+          description: input.description,
           isLocal: input.isLocal,
           name: input.name,
           pathName: bitPkgName,
           url: input.url || null
         })
+
+        bitScopeWithCount = {
+          ...bitScope,
+          bitCount: 0
+        }
+
+        await bitScopeInit(path, bitPkgName, null)
       } catch (e) {
         console.error(e)
         throw new Error('Unable to create scope')
+        return null
       }
 
-      return bitScope
+      return bitScopeWithCount
     }
   }
 }

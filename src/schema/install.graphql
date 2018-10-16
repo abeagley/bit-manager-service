@@ -1,5 +1,4 @@
 input InstallCreateInput {
-  bitPath: String!
   companyName: String!
   credentials: String!
   email: String!

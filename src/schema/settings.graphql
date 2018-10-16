@@ -1,0 +1,7 @@
+type Setting {
+  createdAt: DateTime!
+  companyName: String!
+  id: ID!
+  installed: Boolean!
+  updatedAt: DateTime!
+}

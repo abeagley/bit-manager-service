@@ -1,6 +1,6 @@
 import * as execSh from 'shell-exec'
 import { resolve as pathResolve } from 'path'
-import { appendFile, writeJSON } from 'fs-extra'
+import { appendFile, ensureFile } from 'fs-extra'
 
 import { IContext } from '../context'
 import { SettingNode } from '../generated/prisma'
@@ -33,6 +33,12 @@ export interface SanityCheck {
 export default {
   Query: {
     async sanityCheck (_root: any, args: IWhereArgs<SanityCheckWhere>, ctx: IContext): Promise<SanityCheck | null> {
+      const existingSettings = await ctx.db.settings()
+
+      if (existingSettings.length > 0) {
+        throw new Error('BitManager has already been initialized')
+      }
+
       const shellOpts = getShellOptions()
       let shell: any
 
@@ -56,28 +62,30 @@ export default {
         throw new Error('Unable to run sanity check')
       }
 
-      console.log(sanity)
-
       return sanity
     }
   },
 
   Mutation: {
     async install (_root: any, args: ICreateArgs<InstallCreateInput>, ctx: IContext): Promise<SettingNode | null> {
-      const input = args.data
-
       const existingSettings = await ctx.db.settings()
 
       if (existingSettings.length > 0) {
         throw new Error('BitManager has already been initialized')
       }
 
+      const input = args.data
+      const shellOpts = getShellOptions()
       let settings: SettingNode
+      let shell: any
 
       try {
+        shell = await execSh('whoami', shellOpts)
+        const currentServerUser = stripSlashes(shell.stdout)
+
         settings = await ctx.db.createSetting({
-          baseBitPath: input.bitPath,
           companyName: input.companyName,
+          currentServerUser,
           installed: true
         })
 
@@ -95,11 +103,8 @@ export default {
           ctx
         )
 
-        await writeJSON(pathResolve('src', 'generated', 'env.json'), {
-          BIT_PATH: pathResolve(homedir(), settings.baseBitPath)
-        })
-
         // TODO: Super insecure and will need to be changed
+        await ensureFile(pathResolve(homedir(), '.ssh', 'authorized_keys'))
         await appendFile(pathResolve(homedir(), '.ssh', 'authorized_keys'), `${input.credentials}${EOL}`)
 
         await setEnv()

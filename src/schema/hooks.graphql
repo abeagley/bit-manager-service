@@ -1,0 +1,8 @@
+input BitExportHookCreateInput {
+  bitName: String!
+  scopeName: String!
+}
+
+type BitExportHook {
+  id: String
+}

@@ -1,17 +1,42 @@
 type Bit {
+  bindingPrefix: String
+  box: String!
+  compiler: String
   createdAt: DateTime!
-  createdBy: User! @relation(name: "UserCreatedBits")
+  dependencies: Json
+  deprecated: Boolean @default(value: false)
+  devPackageDependencies: Json
+  dists: Json
+  docs: Json
+  envsPackageDepedencies: Json
+  files: Json
   id: ID! @unique
+  lang: String
+  license: String
+  log: Json
+  mainFile: String
   name: String!
+  packageDependencies: Json
+  peerPackageDepedencies: Json
   scope: BitScope! @relation(name: "BitScopeBits")
+  specsResults: Json
+  tester: String
   updatedAt: DateTime!
   version: String!
+}
+
+type BitExport {
+  bit: Bit! @relation(name: "BitExports")
+  createdAt: DateTime!
+  id: ID! @unique
+  isComplete: Boolean! @default(value: false)
+  updatedAt: DateTime!
 }
 
 type BitScope {
   bits: [Bit!]! @relation(name: "BitScopeBits")
   createdAt: DateTime!
-  createdBy: User! @relation(name: "UserCreatedBitScopes")
+  description: String!
   id: ID! @unique
   isLocal: Boolean! @default(value: true)
   name: String! @unique
@@ -21,9 +46,9 @@ type BitScope {
 }
 
 type Setting {
-  baseBitPath: String! @unique
   createdAt: DateTime!
   companyName: String! @unique
+  currentServerUser: String! @unique
   id: ID! @unique
   installed: Boolean! @default(value: false)
   updatedAt: DateTime!
@@ -36,8 +61,6 @@ enum UserRole {
 
 type User {
   createdAt: DateTime!
-  createdBits: [Bit!]! @relation(name: "UserCreatedBits")
-  createdScopes: [BitScope!]! @relation(name: "UserCreatedBitScopes")
   credentials: String
   email: String! @unique
   id: ID! @unique

@@ -1,5 +1,22 @@
+# import Bit from '../generated/prisma/datamodel.graphql'
+# import ApiUser from './user.graphql'
+
 input BitScopeCreateInput {
+  description: String!
   isLocal: Boolean!
   name: String!
+  url: String
+}
+
+type BitScope {
+  bitCount: Int!
+  bits: [Bit!]!
+  createdAt: DateTime!
+  description: String!
+  id: String!
+  isLocal: Boolean!
+  name: String!
+  pathName: String!
+  updatedAt: DateTime!
   url: String
 }
