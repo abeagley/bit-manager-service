@@ -1,0 +1,5 @@
+input BitWhereUniqueInput {
+  box: String!
+  name: String!
+  scopeName: String!
+}

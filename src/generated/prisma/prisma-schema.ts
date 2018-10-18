@@ -2,10 +2,6 @@ export const typeDefs = /* GraphQL */ `type AggregateBit {
   count: Int!
 }
 
-type AggregateBitExport {
-  count: Int!
-}
-
 type AggregateBitScope {
   count: Int!
 }
@@ -24,29 +20,31 @@ type BatchPayload {
 
 type Bit {
   bindingPrefix: String
-  box: String!
-  compiler: String
+  box: String
   createdAt: DateTime!
+  compiler: String
   dependencies: Json
   deprecated: Boolean
+  devDependencies: Json
   devPackageDependencies: Json
   dists: Json
   docs: Json
-  envsPackageDepedencies: Json
+  envsPackageDependencies: Json
   files: Json
+  hasStorybook: Boolean
   id: ID!
   lang: String
   license: String
   log: Json
   mainFile: String
-  name: String!
+  name: String
   packageDependencies: Json
-  peerPackageDepedencies: Json
+  peerPackageDependencies: Json
   scope: BitScope!
   specsResults: Json
   tester: String
   updatedAt: DateTime!
-  version: String!
+  version: String
 }
 
 type BitConnection {
@@ -57,26 +55,28 @@ type BitConnection {
 
 input BitCreateInput {
   bindingPrefix: String
-  box: String!
+  box: String
   compiler: String
   dependencies: Json
   deprecated: Boolean
+  devDependencies: Json
   devPackageDependencies: Json
   dists: Json
   docs: Json
-  envsPackageDepedencies: Json
+  envsPackageDependencies: Json
   files: Json
+  hasStorybook: Boolean
   lang: String
   license: String
   log: Json
   mainFile: String
-  name: String!
+  name: String
   packageDependencies: Json
-  peerPackageDepedencies: Json
+  peerPackageDependencies: Json
   scope: BitScopeCreateOneWithoutBitsInput!
   specsResults: Json
   tester: String
-  version: String!
+  version: String
 }
 
 input BitCreateManyWithoutScopeInput {
@@ -84,32 +84,29 @@ input BitCreateManyWithoutScopeInput {
   connect: [BitWhereUniqueInput!]
 }
 
-input BitCreateOneInput {
-  create: BitCreateInput
-  connect: BitWhereUniqueInput
-}
-
 input BitCreateWithoutScopeInput {
   bindingPrefix: String
-  box: String!
+  box: String
   compiler: String
   dependencies: Json
   deprecated: Boolean
+  devDependencies: Json
   devPackageDependencies: Json
   dists: Json
   docs: Json
-  envsPackageDepedencies: Json
+  envsPackageDependencies: Json
   files: Json
+  hasStorybook: Boolean
   lang: String
   license: String
   log: Json
   mainFile: String
-  name: String!
+  name: String
   packageDependencies: Json
-  peerPackageDepedencies: Json
+  peerPackageDependencies: Json
   specsResults: Json
   tester: String
-  version: String!
+  version: String
 }
 
 type BitEdge {
@@ -117,137 +114,33 @@ type BitEdge {
   cursor: String!
 }
 
-type BitExport {
-  bit: Bit!
-  createdAt: DateTime!
-  id: ID!
-  isComplete: Boolean!
-  updatedAt: DateTime!
-}
-
-type BitExportConnection {
-  pageInfo: PageInfo!
-  edges: [BitExportEdge]!
-  aggregate: AggregateBitExport!
-}
-
-input BitExportCreateInput {
-  bit: BitCreateOneInput!
-  isComplete: Boolean
-}
-
-type BitExportEdge {
-  node: BitExport!
-  cursor: String!
-}
-
-enum BitExportOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  id_ASC
-  id_DESC
-  isComplete_ASC
-  isComplete_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type BitExportPreviousValues {
-  createdAt: DateTime!
-  id: ID!
-  isComplete: Boolean!
-  updatedAt: DateTime!
-}
-
-type BitExportSubscriptionPayload {
-  mutation: MutationType!
-  node: BitExport
-  updatedFields: [String!]
-  previousValues: BitExportPreviousValues
-}
-
-input BitExportSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: BitExportWhereInput
-  AND: [BitExportSubscriptionWhereInput!]
-  OR: [BitExportSubscriptionWhereInput!]
-  NOT: [BitExportSubscriptionWhereInput!]
-}
-
-input BitExportUpdateInput {
-  bit: BitUpdateOneRequiredInput
-  isComplete: Boolean
-}
-
-input BitExportWhereInput {
-  bit: BitWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  isComplete: Boolean
-  isComplete_not: Boolean
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [BitExportWhereInput!]
-  OR: [BitExportWhereInput!]
-  NOT: [BitExportWhereInput!]
-}
-
-input BitExportWhereUniqueInput {
-  id: ID
-}
-
 enum BitOrderByInput {
   bindingPrefix_ASC
   bindingPrefix_DESC
   box_ASC
   box_DESC
-  compiler_ASC
-  compiler_DESC
   createdAt_ASC
   createdAt_DESC
+  compiler_ASC
+  compiler_DESC
   dependencies_ASC
   dependencies_DESC
   deprecated_ASC
   deprecated_DESC
+  devDependencies_ASC
+  devDependencies_DESC
   devPackageDependencies_ASC
   devPackageDependencies_DESC
   dists_ASC
   dists_DESC
   docs_ASC
   docs_DESC
-  envsPackageDepedencies_ASC
-  envsPackageDepedencies_DESC
+  envsPackageDependencies_ASC
+  envsPackageDependencies_DESC
   files_ASC
   files_DESC
+  hasStorybook_ASC
+  hasStorybook_DESC
   id_ASC
   id_DESC
   lang_ASC
@@ -262,8 +155,8 @@ enum BitOrderByInput {
   name_DESC
   packageDependencies_ASC
   packageDependencies_DESC
-  peerPackageDepedencies_ASC
-  peerPackageDepedencies_DESC
+  peerPackageDependencies_ASC
+  peerPackageDependencies_DESC
   specsResults_ASC
   specsResults_DESC
   tester_ASC
@@ -276,28 +169,30 @@ enum BitOrderByInput {
 
 type BitPreviousValues {
   bindingPrefix: String
-  box: String!
-  compiler: String
+  box: String
   createdAt: DateTime!
+  compiler: String
   dependencies: Json
   deprecated: Boolean
+  devDependencies: Json
   devPackageDependencies: Json
   dists: Json
   docs: Json
-  envsPackageDepedencies: Json
+  envsPackageDependencies: Json
   files: Json
+  hasStorybook: Boolean
   id: ID!
   lang: String
   license: String
   log: Json
   mainFile: String
-  name: String!
+  name: String
   packageDependencies: Json
-  peerPackageDepedencies: Json
+  peerPackageDependencies: Json
   specsResults: Json
   tester: String
   updatedAt: DateTime!
-  version: String!
+  version: String
 }
 
 type BitScope {
@@ -544,48 +439,26 @@ input BitSubscriptionWhereInput {
   NOT: [BitSubscriptionWhereInput!]
 }
 
-input BitUpdateDataInput {
-  bindingPrefix: String
-  box: String
-  compiler: String
-  dependencies: Json
-  deprecated: Boolean
-  devPackageDependencies: Json
-  dists: Json
-  docs: Json
-  envsPackageDepedencies: Json
-  files: Json
-  lang: String
-  license: String
-  log: Json
-  mainFile: String
-  name: String
-  packageDependencies: Json
-  peerPackageDepedencies: Json
-  scope: BitScopeUpdateOneRequiredWithoutBitsInput
-  specsResults: Json
-  tester: String
-  version: String
-}
-
 input BitUpdateInput {
   bindingPrefix: String
   box: String
   compiler: String
   dependencies: Json
   deprecated: Boolean
+  devDependencies: Json
   devPackageDependencies: Json
   dists: Json
   docs: Json
-  envsPackageDepedencies: Json
+  envsPackageDependencies: Json
   files: Json
+  hasStorybook: Boolean
   lang: String
   license: String
   log: Json
   mainFile: String
   name: String
   packageDependencies: Json
-  peerPackageDepedencies: Json
+  peerPackageDependencies: Json
   scope: BitScopeUpdateOneRequiredWithoutBitsInput
   specsResults: Json
   tester: String
@@ -601,31 +474,26 @@ input BitUpdateManyWithoutScopeInput {
   upsert: [BitUpsertWithWhereUniqueWithoutScopeInput!]
 }
 
-input BitUpdateOneRequiredInput {
-  create: BitCreateInput
-  update: BitUpdateDataInput
-  upsert: BitUpsertNestedInput
-  connect: BitWhereUniqueInput
-}
-
 input BitUpdateWithoutScopeDataInput {
   bindingPrefix: String
   box: String
   compiler: String
   dependencies: Json
   deprecated: Boolean
+  devDependencies: Json
   devPackageDependencies: Json
   dists: Json
   docs: Json
-  envsPackageDepedencies: Json
+  envsPackageDependencies: Json
   files: Json
+  hasStorybook: Boolean
   lang: String
   license: String
   log: Json
   mainFile: String
   name: String
   packageDependencies: Json
-  peerPackageDepedencies: Json
+  peerPackageDependencies: Json
   specsResults: Json
   tester: String
   version: String
@@ -634,11 +502,6 @@ input BitUpdateWithoutScopeDataInput {
 input BitUpdateWithWhereUniqueWithoutScopeInput {
   where: BitWhereUniqueInput!
   data: BitUpdateWithoutScopeDataInput!
-}
-
-input BitUpsertNestedInput {
-  update: BitUpdateDataInput!
-  create: BitCreateInput!
 }
 
 input BitUpsertWithWhereUniqueWithoutScopeInput {
@@ -676,6 +539,14 @@ input BitWhereInput {
   box_not_starts_with: String
   box_ends_with: String
   box_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   compiler: String
   compiler_not: String
   compiler_in: [String!]
@@ -690,16 +561,10 @@ input BitWhereInput {
   compiler_not_starts_with: String
   compiler_ends_with: String
   compiler_not_ends_with: String
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
   deprecated: Boolean
   deprecated_not: Boolean
+  hasStorybook: Boolean
+  hasStorybook_not: Boolean
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -829,12 +694,6 @@ type Mutation {
   upsertBit(where: BitWhereUniqueInput!, create: BitCreateInput!, update: BitUpdateInput!): Bit!
   deleteBit(where: BitWhereUniqueInput!): Bit
   deleteManyBits(where: BitWhereInput): BatchPayload!
-  createBitExport(data: BitExportCreateInput!): BitExport!
-  updateBitExport(data: BitExportUpdateInput!, where: BitExportWhereUniqueInput!): BitExport
-  updateManyBitExports(data: BitExportUpdateInput!, where: BitExportWhereInput): BatchPayload!
-  upsertBitExport(where: BitExportWhereUniqueInput!, create: BitExportCreateInput!, update: BitExportUpdateInput!): BitExport!
-  deleteBitExport(where: BitExportWhereUniqueInput!): BitExport
-  deleteManyBitExports(where: BitExportWhereInput): BatchPayload!
   createBitScope(data: BitScopeCreateInput!): BitScope!
   updateBitScope(data: BitScopeUpdateInput!, where: BitScopeWhereUniqueInput!): BitScope
   updateManyBitScopes(data: BitScopeUpdateInput!, where: BitScopeWhereInput): BatchPayload!
@@ -876,9 +735,6 @@ type Query {
   bit(where: BitWhereUniqueInput!): Bit
   bits(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bit]!
   bitsConnection(where: BitWhereInput, orderBy: BitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitConnection!
-  bitExport(where: BitExportWhereUniqueInput!): BitExport
-  bitExports(where: BitExportWhereInput, orderBy: BitExportOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitExport]!
-  bitExportsConnection(where: BitExportWhereInput, orderBy: BitExportOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitExportConnection!
   bitScope(where: BitScopeWhereUniqueInput!): BitScope
   bitScopes(where: BitScopeWhereInput, orderBy: BitScopeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BitScope]!
   bitScopesConnection(where: BitScopeWhereInput, orderBy: BitScopeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BitScopeConnection!
@@ -1039,7 +895,6 @@ input SettingWhereUniqueInput {
 
 type Subscription {
   bit(where: BitSubscriptionWhereInput): BitSubscriptionPayload
-  bitExport(where: BitExportSubscriptionWhereInput): BitExportSubscriptionPayload
   bitScope(where: BitScopeSubscriptionWhereInput): BitScopeSubscriptionPayload
   setting(where: SettingSubscriptionWhereInput): SettingSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload

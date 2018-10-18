@@ -2,6 +2,7 @@ FROM ubuntu:18.04
 MAINTAINER Aric Beagley "https://github.com/abeagley"
 EXPOSE 22 4000
 VOLUME /scopes
+VOLUME /storybook
 VOLUME /home/bit/.ssh
 VOLUME /home/bit/server
 
@@ -23,6 +24,7 @@ RUN mkdir -p /var/run/sshd && \
     touch /home/bit/.ssh/authorized_keys && \
     chown -R bit:bit /home/bit && \
     chown -R bit:bit /scopes && \
+    chown -R bit:bit /storybook && \
     echo "AuthorizedKeysFile %h/.ssh/authorized_keys" >> /etc/ssh/sshd_config && \
     echo "AllowGroups bit" >> /etc/ssh/sshd_config && \
     echo "PasswordAuthentication no" >> /etc/ssh/sshd_config && \

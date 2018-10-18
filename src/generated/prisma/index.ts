@@ -12,7 +12,6 @@ type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export interface Exists {
   bit: (where?: BitWhereInput) => Promise<boolean>;
-  bitExport: (where?: BitExportWhereInput) => Promise<boolean>;
   bitScope: (where?: BitScopeWhereInput) => Promise<boolean>;
   setting: (where?: SettingWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
@@ -61,29 +60,6 @@ export interface Prisma {
       last?: Int;
     }
   ) => BitConnection;
-  bitExport: (where: BitExportWhereUniqueInput) => BitExport;
-  bitExports: (
-    args?: {
-      where?: BitExportWhereInput;
-      orderBy?: BitExportOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<BitExportNode>;
-  bitExportsConnection: (
-    args?: {
-      where?: BitExportWhereInput;
-      orderBy?: BitExportOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => BitExportConnection;
   bitScope: (where: BitScopeWhereUniqueInput) => BitScope;
   bitScopes: (
     args?: {
@@ -175,22 +151,6 @@ export interface Prisma {
   ) => Bit;
   deleteBit: (where: BitWhereUniqueInput) => Bit;
   deleteManyBits: (where?: BitWhereInput) => BatchPayload;
-  createBitExport: (data: BitExportCreateInput) => BitExport;
-  updateBitExport: (
-    args: { data: BitExportUpdateInput; where: BitExportWhereUniqueInput }
-  ) => BitExport;
-  updateManyBitExports: (
-    args: { data: BitExportUpdateInput; where?: BitExportWhereInput }
-  ) => BatchPayload;
-  upsertBitExport: (
-    args: {
-      where: BitExportWhereUniqueInput;
-      create: BitExportCreateInput;
-      update: BitExportUpdateInput;
-    }
-  ) => BitExport;
-  deleteBitExport: (where: BitExportWhereUniqueInput) => BitExport;
-  deleteManyBitExports: (where?: BitExportWhereInput) => BatchPayload;
   createBitScope: (data: BitScopeCreateInput) => BitScope;
   updateBitScope: (
     args: { data: BitScopeUpdateInput; where: BitScopeWhereUniqueInput }
@@ -251,9 +211,6 @@ export interface Subscription {
   bit: (
     where?: BitSubscriptionWhereInput
   ) => BitSubscriptionPayloadSubscription;
-  bitExport: (
-    where?: BitExportSubscriptionWhereInput
-  ) => BitExportSubscriptionPayloadSubscription;
   bitScope: (
     where?: BitScopeSubscriptionWhereInput
   ) => BitScopeSubscriptionPayloadSubscription;
@@ -278,24 +235,28 @@ export type BitOrderByInput =
   | "bindingPrefix_DESC"
   | "box_ASC"
   | "box_DESC"
-  | "compiler_ASC"
-  | "compiler_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
+  | "compiler_ASC"
+  | "compiler_DESC"
   | "dependencies_ASC"
   | "dependencies_DESC"
   | "deprecated_ASC"
   | "deprecated_DESC"
+  | "devDependencies_ASC"
+  | "devDependencies_DESC"
   | "devPackageDependencies_ASC"
   | "devPackageDependencies_DESC"
   | "dists_ASC"
   | "dists_DESC"
   | "docs_ASC"
   | "docs_DESC"
-  | "envsPackageDepedencies_ASC"
-  | "envsPackageDepedencies_DESC"
+  | "envsPackageDependencies_ASC"
+  | "envsPackageDependencies_DESC"
   | "files_ASC"
   | "files_DESC"
+  | "hasStorybook_ASC"
+  | "hasStorybook_DESC"
   | "id_ASC"
   | "id_DESC"
   | "lang_ASC"
@@ -310,8 +271,8 @@ export type BitOrderByInput =
   | "name_DESC"
   | "packageDependencies_ASC"
   | "packageDependencies_DESC"
-  | "peerPackageDepedencies_ASC"
-  | "peerPackageDepedencies_DESC"
+  | "peerPackageDependencies_ASC"
+  | "peerPackageDependencies_DESC"
   | "specsResults_ASC"
   | "specsResults_DESC"
   | "tester_ASC"
@@ -321,17 +282,23 @@ export type BitOrderByInput =
   | "version_ASC"
   | "version_DESC";
 
-export type BitExportOrderByInput =
+export type BitScopeOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
+  | "description_ASC"
+  | "description_DESC"
   | "id_ASC"
   | "id_DESC"
-  | "isComplete_ASC"
-  | "isComplete_DESC"
+  | "isLocal_ASC"
+  | "isLocal_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "pathName_ASC"
+  | "pathName_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+  | "updatedAt_DESC"
+  | "url_ASC"
+  | "url_DESC";
 
 export type SettingOrderByInput =
   | "createdAt_ASC"
@@ -346,6 +313,8 @@ export type SettingOrderByInput =
   | "installed_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
+
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export type UserRole = "ADMIN" | "USER";
 
@@ -367,61 +336,38 @@ export type UserOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type BitScopeOrderByInput =
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "description_ASC"
-  | "description_DESC"
-  | "id_ASC"
-  | "id_DESC"
-  | "isLocal_ASC"
-  | "isLocal_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "pathName_ASC"
-  | "pathName_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "url_ASC"
-  | "url_DESC";
-
-export interface BitUpdateInput {
-  bindingPrefix?: String;
-  box?: String;
-  compiler?: String;
-  dependencies?: Json;
-  deprecated?: Boolean;
-  devPackageDependencies?: Json;
-  dists?: Json;
-  docs?: Json;
-  envsPackageDepedencies?: Json;
-  files?: Json;
-  lang?: String;
-  license?: String;
-  log?: Json;
-  mainFile?: String;
+export interface BitScopeUpdateInput {
+  bits?: BitUpdateManyWithoutScopeInput;
+  description?: String;
+  isLocal?: Boolean;
   name?: String;
-  packageDependencies?: Json;
-  peerPackageDepedencies?: Json;
-  scope?: BitScopeUpdateOneRequiredWithoutBitsInput;
-  specsResults?: Json;
-  tester?: String;
-  version?: String;
+  pathName?: String;
+  url?: String;
 }
 
-export type SettingWhereUniqueInput = AtLeastOne<{
-  companyName: String;
-  currentServerUser?: String;
-  id?: ID_Input;
-}>;
+export interface BitScopeCreateOneWithoutBitsInput {
+  create?: BitScopeCreateWithoutBitsInput;
+  connect?: BitScopeWhereUniqueInput;
+}
+
+export interface BitSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: BitWhereInput;
+  AND?: BitSubscriptionWhereInput[] | BitSubscriptionWhereInput;
+  OR?: BitSubscriptionWhereInput[] | BitSubscriptionWhereInput;
+  NOT?: BitSubscriptionWhereInput[] | BitSubscriptionWhereInput;
+}
 
 export type BitWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface BitUpsertNestedInput {
-  update: BitUpdateDataInput;
-  create: BitCreateInput;
+export interface BitCreateManyWithoutScopeInput {
+  create?: BitCreateWithoutScopeInput[] | BitCreateWithoutScopeInput;
+  connect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
 }
 
 export interface BitScopeWhereInput {
@@ -521,70 +467,70 @@ export interface BitScopeWhereInput {
   NOT?: BitScopeWhereInput[] | BitScopeWhereInput;
 }
 
-export interface SettingWhereInput {
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  companyName?: String;
-  companyName_not?: String;
-  companyName_in?: String[] | String;
-  companyName_not_in?: String[] | String;
-  companyName_lt?: String;
-  companyName_lte?: String;
-  companyName_gt?: String;
-  companyName_gte?: String;
-  companyName_contains?: String;
-  companyName_not_contains?: String;
-  companyName_starts_with?: String;
-  companyName_not_starts_with?: String;
-  companyName_ends_with?: String;
-  companyName_not_ends_with?: String;
-  currentServerUser?: String;
-  currentServerUser_not?: String;
-  currentServerUser_in?: String[] | String;
-  currentServerUser_not_in?: String[] | String;
-  currentServerUser_lt?: String;
-  currentServerUser_lte?: String;
-  currentServerUser_gt?: String;
-  currentServerUser_gte?: String;
-  currentServerUser_contains?: String;
-  currentServerUser_not_contains?: String;
-  currentServerUser_starts_with?: String;
-  currentServerUser_not_starts_with?: String;
-  currentServerUser_ends_with?: String;
-  currentServerUser_not_ends_with?: String;
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
+export interface BitScopeCreateInput {
+  bits?: BitCreateManyWithoutScopeInput;
+  description: String;
+  isLocal?: Boolean;
+  name: String;
+  pathName: String;
+  url?: String;
+}
+
+export interface UserCreateInput {
+  credentials?: String;
+  email: String;
+  name: String;
+  password: String;
+  role?: UserRole;
+}
+
+export interface BitScopeUpsertWithoutBitsInput {
+  update: BitScopeUpdateWithoutBitsDataInput;
+  create: BitScopeCreateWithoutBitsInput;
+}
+
+export interface SettingCreateInput {
+  companyName: String;
+  currentServerUser: String;
   installed?: Boolean;
-  installed_not?: Boolean;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: SettingWhereInput[] | SettingWhereInput;
-  OR?: SettingWhereInput[] | SettingWhereInput;
-  NOT?: SettingWhereInput[] | SettingWhereInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  email: String;
+  id?: ID_Input;
+}>;
+
+export interface BitUpdateWithoutScopeDataInput {
+  bindingPrefix?: String;
+  box?: String;
+  compiler?: String;
+  dependencies?: Json;
+  deprecated?: Boolean;
+  devDependencies?: Json;
+  devPackageDependencies?: Json;
+  dists?: Json;
+  docs?: Json;
+  envsPackageDependencies?: Json;
+  files?: Json;
+  hasStorybook?: Boolean;
+  lang?: String;
+  license?: String;
+  log?: Json;
+  mainFile?: String;
+  name?: String;
+  packageDependencies?: Json;
+  peerPackageDependencies?: Json;
+  specsResults?: Json;
+  tester?: String;
+  version?: String;
+}
+
+export interface BitScopeUpdateWithoutBitsDataInput {
+  description?: String;
+  isLocal?: Boolean;
+  name?: String;
+  pathName?: String;
+  url?: String;
 }
 
 export interface UserUpdateInput {
@@ -594,129 +540,6 @@ export interface UserUpdateInput {
   password?: String;
   role?: UserRole;
 }
-
-export interface BitExportSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: BitExportWhereInput;
-  AND?: BitExportSubscriptionWhereInput[] | BitExportSubscriptionWhereInput;
-  OR?: BitExportSubscriptionWhereInput[] | BitExportSubscriptionWhereInput;
-  NOT?: BitExportSubscriptionWhereInput[] | BitExportSubscriptionWhereInput;
-}
-
-export interface SettingUpdateInput {
-  companyName?: String;
-  currentServerUser?: String;
-  installed?: Boolean;
-}
-
-export interface BitUpdateDataInput {
-  bindingPrefix?: String;
-  box?: String;
-  compiler?: String;
-  dependencies?: Json;
-  deprecated?: Boolean;
-  devPackageDependencies?: Json;
-  dists?: Json;
-  docs?: Json;
-  envsPackageDepedencies?: Json;
-  files?: Json;
-  lang?: String;
-  license?: String;
-  log?: Json;
-  mainFile?: String;
-  name?: String;
-  packageDependencies?: Json;
-  peerPackageDepedencies?: Json;
-  scope?: BitScopeUpdateOneRequiredWithoutBitsInput;
-  specsResults?: Json;
-  tester?: String;
-  version?: String;
-}
-
-export interface BitUpsertWithWhereUniqueWithoutScopeInput {
-  where: BitWhereUniqueInput;
-  update: BitUpdateWithoutScopeDataInput;
-  create: BitCreateWithoutScopeInput;
-}
-
-export interface BitUpdateOneRequiredInput {
-  create?: BitCreateInput;
-  update?: BitUpdateDataInput;
-  upsert?: BitUpsertNestedInput;
-  connect?: BitWhereUniqueInput;
-}
-
-export interface BitUpdateWithoutScopeDataInput {
-  bindingPrefix?: String;
-  box?: String;
-  compiler?: String;
-  dependencies?: Json;
-  deprecated?: Boolean;
-  devPackageDependencies?: Json;
-  dists?: Json;
-  docs?: Json;
-  envsPackageDepedencies?: Json;
-  files?: Json;
-  lang?: String;
-  license?: String;
-  log?: Json;
-  mainFile?: String;
-  name?: String;
-  packageDependencies?: Json;
-  peerPackageDepedencies?: Json;
-  specsResults?: Json;
-  tester?: String;
-  version?: String;
-}
-
-export interface BitExportUpdateInput {
-  bit?: BitUpdateOneRequiredInput;
-  isComplete?: Boolean;
-}
-
-export interface BitSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: BitWhereInput;
-  AND?: BitSubscriptionWhereInput[] | BitSubscriptionWhereInput;
-  OR?: BitSubscriptionWhereInput[] | BitSubscriptionWhereInput;
-  NOT?: BitSubscriptionWhereInput[] | BitSubscriptionWhereInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  email: String;
-  id?: ID_Input;
-}>;
-
-export interface BitUpdateManyWithoutScopeInput {
-  create?: BitCreateWithoutScopeInput[] | BitCreateWithoutScopeInput;
-  delete?: BitWhereUniqueInput[] | BitWhereUniqueInput;
-  connect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
-  disconnect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
-  update?:
-    | BitUpdateWithWhereUniqueWithoutScopeInput[]
-    | BitUpdateWithWhereUniqueWithoutScopeInput;
-  upsert?:
-    | BitUpsertWithWhereUniqueWithoutScopeInput[]
-    | BitUpsertWithWhereUniqueWithoutScopeInput;
-}
-
-export interface BitCreateOneInput {
-  create?: BitCreateInput;
-  connect?: BitWhereUniqueInput;
-}
-
-export type BitScopeWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-  pathName?: String;
-  url?: String;
-}>;
 
 export interface BitScopeSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
@@ -729,27 +552,17 @@ export interface BitScopeSubscriptionWhereInput {
   NOT?: BitScopeSubscriptionWhereInput[] | BitScopeSubscriptionWhereInput;
 }
 
-export interface BitCreateWithoutScopeInput {
-  bindingPrefix?: String;
-  box: String;
-  compiler?: String;
-  dependencies?: Json;
-  deprecated?: Boolean;
-  devPackageDependencies?: Json;
-  dists?: Json;
-  docs?: Json;
-  envsPackageDepedencies?: Json;
-  files?: Json;
-  lang?: String;
-  license?: String;
-  log?: Json;
-  mainFile?: String;
-  name: String;
-  packageDependencies?: Json;
-  peerPackageDepedencies?: Json;
-  specsResults?: Json;
-  tester?: String;
-  version: String;
+export interface BitUpdateManyWithoutScopeInput {
+  create?: BitCreateWithoutScopeInput[] | BitCreateWithoutScopeInput;
+  delete?: BitWhereUniqueInput[] | BitWhereUniqueInput;
+  connect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
+  disconnect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
+  update?:
+    | BitUpdateWithWhereUniqueWithoutScopeInput[]
+    | BitUpdateWithWhereUniqueWithoutScopeInput;
+  upsert?:
+    | BitUpsertWithWhereUniqueWithoutScopeInput[]
+    | BitUpsertWithWhereUniqueWithoutScopeInput;
 }
 
 export interface UserWhereInput {
@@ -848,14 +661,11 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface BitScopeCreateInput {
-  bits?: BitCreateManyWithoutScopeInput;
-  description: String;
-  isLocal?: Boolean;
-  name: String;
-  pathName: String;
-  url?: String;
-}
+export type SettingWhereUniqueInput = AtLeastOne<{
+  companyName: String;
+  currentServerUser?: String;
+  id?: ID_Input;
+}>;
 
 export interface SettingSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
@@ -868,26 +678,150 @@ export interface SettingSubscriptionWhereInput {
   NOT?: SettingSubscriptionWhereInput[] | SettingSubscriptionWhereInput;
 }
 
-export interface UserCreateInput {
-  credentials?: String;
-  email: String;
-  name: String;
-  password: String;
-  role?: UserRole;
+export interface SettingWhereInput {
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  companyName?: String;
+  companyName_not?: String;
+  companyName_in?: String[] | String;
+  companyName_not_in?: String[] | String;
+  companyName_lt?: String;
+  companyName_lte?: String;
+  companyName_gt?: String;
+  companyName_gte?: String;
+  companyName_contains?: String;
+  companyName_not_contains?: String;
+  companyName_starts_with?: String;
+  companyName_not_starts_with?: String;
+  companyName_ends_with?: String;
+  companyName_not_ends_with?: String;
+  currentServerUser?: String;
+  currentServerUser_not?: String;
+  currentServerUser_in?: String[] | String;
+  currentServerUser_not_in?: String[] | String;
+  currentServerUser_lt?: String;
+  currentServerUser_lte?: String;
+  currentServerUser_gt?: String;
+  currentServerUser_gte?: String;
+  currentServerUser_contains?: String;
+  currentServerUser_not_contains?: String;
+  currentServerUser_starts_with?: String;
+  currentServerUser_not_starts_with?: String;
+  currentServerUser_ends_with?: String;
+  currentServerUser_not_ends_with?: String;
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  installed?: Boolean;
+  installed_not?: Boolean;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: SettingWhereInput[] | SettingWhereInput;
+  OR?: SettingWhereInput[] | SettingWhereInput;
+  NOT?: SettingWhereInput[] | SettingWhereInput;
 }
 
-export interface BitExportCreateInput {
-  bit: BitCreateOneInput;
-  isComplete?: Boolean;
+export interface BitScopeUpdateOneRequiredWithoutBitsInput {
+  create?: BitScopeCreateWithoutBitsInput;
+  update?: BitScopeUpdateWithoutBitsDataInput;
+  upsert?: BitScopeUpsertWithoutBitsInput;
+  connect?: BitScopeWhereUniqueInput;
 }
 
-export type BitExportWhereUniqueInput = AtLeastOne<{
+export interface SettingUpdateInput {
+  companyName?: String;
+  currentServerUser?: String;
+  installed?: Boolean;
+}
+
+export type BitScopeWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  name?: String;
+  pathName?: String;
+  url?: String;
 }>;
 
-export interface BitScopeUpsertWithoutBitsInput {
-  update: BitScopeUpdateWithoutBitsDataInput;
-  create: BitScopeCreateWithoutBitsInput;
+export interface BitCreateInput {
+  bindingPrefix?: String;
+  box?: String;
+  compiler?: String;
+  dependencies?: Json;
+  deprecated?: Boolean;
+  devDependencies?: Json;
+  devPackageDependencies?: Json;
+  dists?: Json;
+  docs?: Json;
+  envsPackageDependencies?: Json;
+  files?: Json;
+  hasStorybook?: Boolean;
+  lang?: String;
+  license?: String;
+  log?: Json;
+  mainFile?: String;
+  name?: String;
+  packageDependencies?: Json;
+  peerPackageDependencies?: Json;
+  scope: BitScopeCreateOneWithoutBitsInput;
+  specsResults?: Json;
+  tester?: String;
+  version?: String;
+}
+
+export interface BitScopeCreateWithoutBitsInput {
+  description: String;
+  isLocal?: Boolean;
+  name: String;
+  pathName: String;
+  url?: String;
+}
+
+export interface BitUpdateInput {
+  bindingPrefix?: String;
+  box?: String;
+  compiler?: String;
+  dependencies?: Json;
+  deprecated?: Boolean;
+  devDependencies?: Json;
+  devPackageDependencies?: Json;
+  dists?: Json;
+  docs?: Json;
+  envsPackageDependencies?: Json;
+  files?: Json;
+  hasStorybook?: Boolean;
+  lang?: String;
+  license?: String;
+  log?: Json;
+  mainFile?: String;
+  name?: String;
+  packageDependencies?: Json;
+  peerPackageDependencies?: Json;
+  scope?: BitScopeUpdateOneRequiredWithoutBitsInput;
+  specsResults?: Json;
+  tester?: String;
+  version?: String;
 }
 
 export interface BitUpdateWithWhereUniqueWithoutScopeInput {
@@ -895,23 +829,10 @@ export interface BitUpdateWithWhereUniqueWithoutScopeInput {
   data: BitUpdateWithoutScopeDataInput;
 }
 
-export interface BitScopeUpdateWithoutBitsDataInput {
-  description?: String;
-  isLocal?: Boolean;
-  name?: String;
-  pathName?: String;
-  url?: String;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+export interface BitUpsertWithWhereUniqueWithoutScopeInput {
+  where: BitWhereUniqueInput;
+  update: BitUpdateWithoutScopeDataInput;
+  create: BitCreateWithoutScopeInput;
 }
 
 export interface BitWhereInput {
@@ -943,6 +864,14 @@ export interface BitWhereInput {
   box_not_starts_with?: String;
   box_ends_with?: String;
   box_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
   compiler?: String;
   compiler_not?: String;
   compiler_in?: String[] | String;
@@ -957,16 +886,10 @@ export interface BitWhereInput {
   compiler_not_starts_with?: String;
   compiler_ends_with?: String;
   compiler_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
   deprecated?: Boolean;
   deprecated_not?: Boolean;
+  hasStorybook?: Boolean;
+  hasStorybook_not?: Boolean;
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1079,127 +1002,78 @@ export interface BitWhereInput {
   NOT?: BitWhereInput[] | BitWhereInput;
 }
 
-export interface BitScopeCreateWithoutBitsInput {
-  description: String;
-  isLocal?: Boolean;
-  name: String;
-  pathName: String;
-  url?: String;
-}
-
-export interface BitScopeCreateOneWithoutBitsInput {
-  create?: BitScopeCreateWithoutBitsInput;
-  connect?: BitScopeWhereUniqueInput;
-}
-
-export interface BitCreateInput {
+export interface BitCreateWithoutScopeInput {
   bindingPrefix?: String;
-  box: String;
+  box?: String;
   compiler?: String;
   dependencies?: Json;
   deprecated?: Boolean;
+  devDependencies?: Json;
   devPackageDependencies?: Json;
   dists?: Json;
   docs?: Json;
-  envsPackageDepedencies?: Json;
+  envsPackageDependencies?: Json;
   files?: Json;
+  hasStorybook?: Boolean;
   lang?: String;
   license?: String;
   log?: Json;
   mainFile?: String;
-  name: String;
+  name?: String;
   packageDependencies?: Json;
-  peerPackageDepedencies?: Json;
-  scope: BitScopeCreateOneWithoutBitsInput;
+  peerPackageDependencies?: Json;
   specsResults?: Json;
   tester?: String;
-  version: String;
+  version?: String;
 }
 
-export interface BitScopeUpdateOneRequiredWithoutBitsInput {
-  create?: BitScopeCreateWithoutBitsInput;
-  update?: BitScopeUpdateWithoutBitsDataInput;
-  upsert?: BitScopeUpsertWithoutBitsInput;
-  connect?: BitScopeWhereUniqueInput;
-}
-
-export interface SettingCreateInput {
-  companyName: String;
-  currentServerUser: String;
-  installed?: Boolean;
-}
-
-export interface BitCreateManyWithoutScopeInput {
-  create?: BitCreateWithoutScopeInput[] | BitCreateWithoutScopeInput;
-  connect?: BitWhereUniqueInput[] | BitWhereUniqueInput;
-}
-
-export interface BitScopeUpdateInput {
-  bits?: BitUpdateManyWithoutScopeInput;
-  description?: String;
-  isLocal?: Boolean;
-  name?: String;
-  pathName?: String;
-  url?: String;
-}
-
-export interface BitExportWhereInput {
-  bit?: BitWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  isComplete?: Boolean;
-  isComplete_not?: Boolean;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: BitExportWhereInput[] | BitExportWhereInput;
-  OR?: BitExportWhereInput[] | BitExportWhereInput;
-  NOT?: BitExportWhereInput[] | BitExportWhereInput;
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface BitEdgeNode {
-  cursor: String;
+export interface AggregateUserNode {
+  count: Int;
 }
 
-export interface BitEdge extends Promise<BitEdgeNode>, Fragmentable {
-  node: <T = Bit>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface BitEdgeSubscription
-  extends Promise<AsyncIterator<BitEdgeNode>>,
+export interface AggregateUser
+  extends Promise<AggregateUserNode>,
     Fragmentable {
-  node: <T = BitSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUserNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BitConnectionNode {}
+
+export interface BitConnection
+  extends Promise<BitConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<BitEdgeNode>>() => T;
+  aggregate: <T = AggregateBit>() => T;
+}
+
+export interface BitConnectionSubscription
+  extends Promise<AsyncIterator<BitConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<BitEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateBitSubscription>() => T;
 }
 
 export interface UserPreviousValuesNode {
@@ -1239,59 +1113,20 @@ export interface UserPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface PageInfoNode {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfoNode>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserEdgeNode {
+export interface BitEdgeNode {
   cursor: String;
 }
 
-export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
-  node: <T = User>() => T;
+export interface BitEdge extends Promise<BitEdgeNode>, Fragmentable {
+  node: <T = Bit>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdgeNode>>,
+export interface BitEdgeSubscription
+  extends Promise<AsyncIterator<BitEdgeNode>>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
+  node: <T = BitSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateUserNode {
-  count: Int;
-}
-
-export interface AggregateUser
-  extends Promise<AggregateUserNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUserNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface BitScopePreviousValuesNode {
@@ -1331,36 +1166,27 @@ export interface BitScopePreviousValuesSubscription
   url: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BatchPayloadNode {
-  count: Long;
+export interface PageInfoNode {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
 }
 
-export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
-  count: () => Promise<Long>;
+export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
 }
 
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayloadNode>>,
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfoNode>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface BitConnectionNode {}
-
-export interface BitConnection
-  extends Promise<BitConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<BitEdgeNode>>() => T;
-  aggregate: <T = AggregateBit>() => T;
-}
-
-export interface BitConnectionSubscription
-  extends Promise<AsyncIterator<BitConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BitEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBitSubscription>() => T;
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserConnectionNode {}
@@ -1381,61 +1207,85 @@ export interface UserConnectionSubscription
   aggregate: <T = AggregateUserSubscription>() => T;
 }
 
-export interface AggregateSettingNode {
-  count: Int;
+export interface UserEdgeNode {
+  cursor: String;
 }
 
-export interface AggregateSetting
-  extends Promise<AggregateSettingNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateSettingSubscription
-  extends Promise<AsyncIterator<AggregateSettingNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface UserSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface UserSubscriptionPayload
-  extends Promise<UserSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
+export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
   node: <T = User>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValues>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdgeNode>>,
     Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
   node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface SettingConnectionNode {}
-
-export interface SettingConnection
-  extends Promise<SettingConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<SettingEdgeNode>>() => T;
-  aggregate: <T = AggregateSetting>() => T;
+export interface BatchPayloadNode {
+  count: Long;
 }
 
-export interface SettingConnectionSubscription
-  extends Promise<AsyncIterator<SettingConnectionNode>>,
+export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayloadNode>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SettingEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSettingSubscription>() => T;
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface UserNode {
+  createdAt: DateTimeOutput;
+  credentials?: String;
+  email: String;
+  id: ID_Output;
+  name: String;
+  password: String;
+  role: UserRole;
+  updatedAt: DateTimeOutput;
+}
+
+export interface User extends Promise<UserNode>, Fragmentable {
+  createdAt: () => Promise<DateTimeOutput>;
+  credentials: () => Promise<String>;
+  email: () => Promise<String>;
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  password: () => Promise<String>;
+  role: () => Promise<UserRole>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<UserNode>>,
+    Fragmentable {
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  credentials: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<UserRole>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface SettingEdgeNode {
+  cursor: String;
+}
+
+export interface SettingEdge extends Promise<SettingEdgeNode>, Fragmentable {
+  node: <T = Setting>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SettingEdgeSubscription
+  extends Promise<AsyncIterator<SettingEdgeNode>>,
+    Fragmentable {
+  node: <T = SettingSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BitScopeNode {
@@ -1495,60 +1345,77 @@ export interface BitScopeSubscription
   url: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateBitScopeNode {
-  count: Int;
+export interface SettingNode {
+  createdAt: DateTimeOutput;
+  companyName: String;
+  currentServerUser: String;
+  id: ID_Output;
+  installed: Boolean;
+  updatedAt: DateTimeOutput;
 }
 
-export interface AggregateBitScope
-  extends Promise<AggregateBitScopeNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface Setting extends Promise<SettingNode>, Fragmentable {
+  createdAt: () => Promise<DateTimeOutput>;
+  companyName: () => Promise<String>;
+  currentServerUser: () => Promise<String>;
+  id: () => Promise<ID_Output>;
+  installed: () => Promise<Boolean>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface AggregateBitScopeSubscription
-  extends Promise<AsyncIterator<AggregateBitScopeNode>>,
+export interface SettingSubscription
+  extends Promise<AsyncIterator<SettingNode>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  companyName: () => Promise<AsyncIterator<String>>;
+  currentServerUser: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  installed: () => Promise<AsyncIterator<Boolean>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface BitNode {
   bindingPrefix?: String;
-  box: String;
-  compiler?: String;
+  box?: String;
   createdAt: DateTimeOutput;
+  compiler?: String;
   dependencies?: Json;
   deprecated?: Boolean;
+  devDependencies?: Json;
   devPackageDependencies?: Json;
   dists?: Json;
   docs?: Json;
-  envsPackageDepedencies?: Json;
+  envsPackageDependencies?: Json;
   files?: Json;
+  hasStorybook?: Boolean;
   id: ID_Output;
   lang?: String;
   license?: String;
   log?: Json;
   mainFile?: String;
-  name: String;
+  name?: String;
   packageDependencies?: Json;
-  peerPackageDepedencies?: Json;
+  peerPackageDependencies?: Json;
   specsResults?: Json;
   tester?: String;
   updatedAt: DateTimeOutput;
-  version: String;
+  version?: String;
 }
 
 export interface Bit extends Promise<BitNode>, Fragmentable {
   bindingPrefix: () => Promise<String>;
   box: () => Promise<String>;
-  compiler: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
+  compiler: () => Promise<String>;
   dependencies: () => Promise<Json>;
   deprecated: () => Promise<Boolean>;
+  devDependencies: () => Promise<Json>;
   devPackageDependencies: () => Promise<Json>;
   dists: () => Promise<Json>;
   docs: () => Promise<Json>;
-  envsPackageDepedencies: () => Promise<Json>;
+  envsPackageDependencies: () => Promise<Json>;
   files: () => Promise<Json>;
+  hasStorybook: () => Promise<Boolean>;
   id: () => Promise<ID_Output>;
   lang: () => Promise<String>;
   license: () => Promise<String>;
@@ -1556,7 +1423,7 @@ export interface Bit extends Promise<BitNode>, Fragmentable {
   mainFile: () => Promise<String>;
   name: () => Promise<String>;
   packageDependencies: () => Promise<Json>;
-  peerPackageDepedencies: () => Promise<Json>;
+  peerPackageDependencies: () => Promise<Json>;
   scope: <T = BitScope>() => T;
   specsResults: () => Promise<Json>;
   tester: () => Promise<String>;
@@ -1569,15 +1436,17 @@ export interface BitSubscription
     Fragmentable {
   bindingPrefix: () => Promise<AsyncIterator<String>>;
   box: () => Promise<AsyncIterator<String>>;
-  compiler: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  compiler: () => Promise<AsyncIterator<String>>;
   dependencies: () => Promise<AsyncIterator<Json>>;
   deprecated: () => Promise<AsyncIterator<Boolean>>;
+  devDependencies: () => Promise<AsyncIterator<Json>>;
   devPackageDependencies: () => Promise<AsyncIterator<Json>>;
   dists: () => Promise<AsyncIterator<Json>>;
   docs: () => Promise<AsyncIterator<Json>>;
-  envsPackageDepedencies: () => Promise<AsyncIterator<Json>>;
+  envsPackageDependencies: () => Promise<AsyncIterator<Json>>;
   files: () => Promise<AsyncIterator<Json>>;
+  hasStorybook: () => Promise<AsyncIterator<Boolean>>;
   id: () => Promise<AsyncIterator<ID_Output>>;
   lang: () => Promise<AsyncIterator<String>>;
   license: () => Promise<AsyncIterator<String>>;
@@ -1585,7 +1454,7 @@ export interface BitSubscription
   mainFile: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   packageDependencies: () => Promise<AsyncIterator<Json>>;
-  peerPackageDepedencies: () => Promise<AsyncIterator<Json>>;
+  peerPackageDependencies: () => Promise<AsyncIterator<Json>>;
   scope: <T = BitScopeSubscription>() => T;
   specsResults: () => Promise<AsyncIterator<Json>>;
   tester: () => Promise<AsyncIterator<String>>;
@@ -1593,170 +1462,20 @@ export interface BitSubscription
   version: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BitScopeConnectionNode {}
-
-export interface BitScopeConnection
-  extends Promise<BitScopeConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<BitScopeEdgeNode>>() => T;
-  aggregate: <T = AggregateBitScope>() => T;
-}
-
-export interface BitScopeConnectionSubscription
-  extends Promise<AsyncIterator<BitScopeConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BitScopeEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBitScopeSubscription>() => T;
-}
-
-export interface BitSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface BitSubscriptionPayload
-  extends Promise<BitSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = Bit>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = BitPreviousValues>() => T;
-}
-
-export interface BitSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<BitSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = BitSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = BitPreviousValuesSubscription>() => T;
-}
-
-export interface BitExportEdgeNode {
+export interface BitScopeEdgeNode {
   cursor: String;
 }
 
-export interface BitExportEdge
-  extends Promise<BitExportEdgeNode>,
-    Fragmentable {
-  node: <T = BitExport>() => T;
+export interface BitScopeEdge extends Promise<BitScopeEdgeNode>, Fragmentable {
+  node: <T = BitScope>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface BitExportEdgeSubscription
-  extends Promise<AsyncIterator<BitExportEdgeNode>>,
+export interface BitScopeEdgeSubscription
+  extends Promise<AsyncIterator<BitScopeEdgeNode>>,
     Fragmentable {
-  node: <T = BitExportSubscription>() => T;
+  node: <T = BitScopeSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BitPreviousValuesNode {
-  bindingPrefix?: String;
-  box: String;
-  compiler?: String;
-  createdAt: DateTimeOutput;
-  dependencies?: Json;
-  deprecated?: Boolean;
-  devPackageDependencies?: Json;
-  dists?: Json;
-  docs?: Json;
-  envsPackageDepedencies?: Json;
-  files?: Json;
-  id: ID_Output;
-  lang?: String;
-  license?: String;
-  log?: Json;
-  mainFile?: String;
-  name: String;
-  packageDependencies?: Json;
-  peerPackageDepedencies?: Json;
-  specsResults?: Json;
-  tester?: String;
-  updatedAt: DateTimeOutput;
-  version: String;
-}
-
-export interface BitPreviousValues
-  extends Promise<BitPreviousValuesNode>,
-    Fragmentable {
-  bindingPrefix: () => Promise<String>;
-  box: () => Promise<String>;
-  compiler: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  dependencies: () => Promise<Json>;
-  deprecated: () => Promise<Boolean>;
-  devPackageDependencies: () => Promise<Json>;
-  dists: () => Promise<Json>;
-  docs: () => Promise<Json>;
-  envsPackageDepedencies: () => Promise<Json>;
-  files: () => Promise<Json>;
-  id: () => Promise<ID_Output>;
-  lang: () => Promise<String>;
-  license: () => Promise<String>;
-  log: () => Promise<Json>;
-  mainFile: () => Promise<String>;
-  name: () => Promise<String>;
-  packageDependencies: () => Promise<Json>;
-  peerPackageDepedencies: () => Promise<Json>;
-  specsResults: () => Promise<Json>;
-  tester: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  version: () => Promise<String>;
-}
-
-export interface BitPreviousValuesSubscription
-  extends Promise<AsyncIterator<BitPreviousValuesNode>>,
-    Fragmentable {
-  bindingPrefix: () => Promise<AsyncIterator<String>>;
-  box: () => Promise<AsyncIterator<String>>;
-  compiler: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  dependencies: () => Promise<AsyncIterator<Json>>;
-  deprecated: () => Promise<AsyncIterator<Boolean>>;
-  devPackageDependencies: () => Promise<AsyncIterator<Json>>;
-  dists: () => Promise<AsyncIterator<Json>>;
-  docs: () => Promise<AsyncIterator<Json>>;
-  envsPackageDepedencies: () => Promise<AsyncIterator<Json>>;
-  files: () => Promise<AsyncIterator<Json>>;
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  lang: () => Promise<AsyncIterator<String>>;
-  license: () => Promise<AsyncIterator<String>>;
-  log: () => Promise<AsyncIterator<Json>>;
-  mainFile: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  packageDependencies: () => Promise<AsyncIterator<Json>>;
-  peerPackageDepedencies: () => Promise<AsyncIterator<Json>>;
-  specsResults: () => Promise<AsyncIterator<Json>>;
-  tester: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  version: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BitExportNode {
-  createdAt: DateTimeOutput;
-  id: ID_Output;
-  isComplete: Boolean;
-  updatedAt: DateTimeOutput;
-}
-
-export interface BitExport extends Promise<BitExportNode>, Fragmentable {
-  bit: <T = Bit>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  id: () => Promise<ID_Output>;
-  isComplete: () => Promise<Boolean>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface BitExportSubscription
-  extends Promise<AsyncIterator<BitExportNode>>,
-    Fragmentable {
-  bit: <T = BitSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  isComplete: () => Promise<AsyncIterator<Boolean>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface SettingPreviousValuesNode {
@@ -1790,68 +1509,41 @@ export interface SettingPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface UserNode {
-  createdAt: DateTimeOutput;
-  credentials?: String;
-  email: String;
-  id: ID_Output;
-  name: String;
-  password: String;
-  role: UserRole;
-  updatedAt: DateTimeOutput;
+export interface AggregateBitNode {
+  count: Int;
 }
 
-export interface User extends Promise<UserNode>, Fragmentable {
-  createdAt: () => Promise<DateTimeOutput>;
-  credentials: () => Promise<String>;
-  email: () => Promise<String>;
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  password: () => Promise<String>;
-  role: () => Promise<UserRole>;
-  updatedAt: () => Promise<DateTimeOutput>;
+export interface AggregateBit extends Promise<AggregateBitNode>, Fragmentable {
+  count: () => Promise<Int>;
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<UserNode>>,
+export interface AggregateBitSubscription
+  extends Promise<AsyncIterator<AggregateBitNode>>,
     Fragmentable {
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  credentials: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  role: () => Promise<AsyncIterator<UserRole>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface SettingNode {
-  createdAt: DateTimeOutput;
-  companyName: String;
-  currentServerUser: String;
-  id: ID_Output;
-  installed: Boolean;
-  updatedAt: DateTimeOutput;
+export interface UserSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
 }
 
-export interface Setting extends Promise<SettingNode>, Fragmentable {
-  createdAt: () => Promise<DateTimeOutput>;
-  companyName: () => Promise<String>;
-  currentServerUser: () => Promise<String>;
-  id: () => Promise<ID_Output>;
-  installed: () => Promise<Boolean>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface SettingSubscription
-  extends Promise<AsyncIterator<SettingNode>>,
+export interface UserSubscriptionPayload
+  extends Promise<UserSubscriptionPayloadNode>,
     Fragmentable {
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  companyName: () => Promise<AsyncIterator<String>>;
-  currentServerUser: () => Promise<AsyncIterator<String>>;
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  installed: () => Promise<AsyncIterator<Boolean>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  mutation: () => Promise<MutationType>;
+  node: <T = User>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValues>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
 export interface BitScopeSubscriptionPayloadNode {
@@ -1900,133 +1592,189 @@ export interface SettingSubscriptionPayloadSubscription
   previousValues: <T = SettingPreviousValuesSubscription>() => T;
 }
 
-export interface BitExportPreviousValuesNode {
+export interface BitPreviousValuesNode {
+  bindingPrefix?: String;
+  box?: String;
   createdAt: DateTimeOutput;
+  compiler?: String;
+  dependencies?: Json;
+  deprecated?: Boolean;
+  devDependencies?: Json;
+  devPackageDependencies?: Json;
+  dists?: Json;
+  docs?: Json;
+  envsPackageDependencies?: Json;
+  files?: Json;
+  hasStorybook?: Boolean;
   id: ID_Output;
-  isComplete: Boolean;
+  lang?: String;
+  license?: String;
+  log?: Json;
+  mainFile?: String;
+  name?: String;
+  packageDependencies?: Json;
+  peerPackageDependencies?: Json;
+  specsResults?: Json;
+  tester?: String;
   updatedAt: DateTimeOutput;
+  version?: String;
 }
 
-export interface BitExportPreviousValues
-  extends Promise<BitExportPreviousValuesNode>,
+export interface BitPreviousValues
+  extends Promise<BitPreviousValuesNode>,
     Fragmentable {
+  bindingPrefix: () => Promise<String>;
+  box: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
+  compiler: () => Promise<String>;
+  dependencies: () => Promise<Json>;
+  deprecated: () => Promise<Boolean>;
+  devDependencies: () => Promise<Json>;
+  devPackageDependencies: () => Promise<Json>;
+  dists: () => Promise<Json>;
+  docs: () => Promise<Json>;
+  envsPackageDependencies: () => Promise<Json>;
+  files: () => Promise<Json>;
+  hasStorybook: () => Promise<Boolean>;
   id: () => Promise<ID_Output>;
-  isComplete: () => Promise<Boolean>;
+  lang: () => Promise<String>;
+  license: () => Promise<String>;
+  log: () => Promise<Json>;
+  mainFile: () => Promise<String>;
+  name: () => Promise<String>;
+  packageDependencies: () => Promise<Json>;
+  peerPackageDependencies: () => Promise<Json>;
+  specsResults: () => Promise<Json>;
+  tester: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
+  version: () => Promise<String>;
 }
 
-export interface BitExportPreviousValuesSubscription
-  extends Promise<AsyncIterator<BitExportPreviousValuesNode>>,
+export interface BitPreviousValuesSubscription
+  extends Promise<AsyncIterator<BitPreviousValuesNode>>,
     Fragmentable {
+  bindingPrefix: () => Promise<AsyncIterator<String>>;
+  box: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  compiler: () => Promise<AsyncIterator<String>>;
+  dependencies: () => Promise<AsyncIterator<Json>>;
+  deprecated: () => Promise<AsyncIterator<Boolean>>;
+  devDependencies: () => Promise<AsyncIterator<Json>>;
+  devPackageDependencies: () => Promise<AsyncIterator<Json>>;
+  dists: () => Promise<AsyncIterator<Json>>;
+  docs: () => Promise<AsyncIterator<Json>>;
+  envsPackageDependencies: () => Promise<AsyncIterator<Json>>;
+  files: () => Promise<AsyncIterator<Json>>;
+  hasStorybook: () => Promise<AsyncIterator<Boolean>>;
   id: () => Promise<AsyncIterator<ID_Output>>;
-  isComplete: () => Promise<AsyncIterator<Boolean>>;
+  lang: () => Promise<AsyncIterator<String>>;
+  license: () => Promise<AsyncIterator<String>>;
+  log: () => Promise<AsyncIterator<Json>>;
+  mainFile: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  packageDependencies: () => Promise<AsyncIterator<Json>>;
+  peerPackageDependencies: () => Promise<AsyncIterator<Json>>;
+  specsResults: () => Promise<AsyncIterator<Json>>;
+  tester: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  version: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BitExportSubscriptionPayloadNode {
+export interface BitSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface BitExportSubscriptionPayload
-  extends Promise<BitExportSubscriptionPayloadNode>,
+export interface BitSubscriptionPayload
+  extends Promise<BitSubscriptionPayloadNode>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = BitExport>() => T;
+  node: <T = Bit>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = BitExportPreviousValues>() => T;
+  previousValues: <T = BitPreviousValues>() => T;
 }
 
-export interface BitExportSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<BitExportSubscriptionPayloadNode>>,
+export interface BitSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<BitSubscriptionPayloadNode>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = BitExportSubscription>() => T;
+  node: <T = BitSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = BitExportPreviousValuesSubscription>() => T;
+  previousValues: <T = BitPreviousValuesSubscription>() => T;
 }
 
-export interface BitScopeEdgeNode {
-  cursor: String;
-}
+export interface SettingConnectionNode {}
 
-export interface BitScopeEdge extends Promise<BitScopeEdgeNode>, Fragmentable {
-  node: <T = BitScope>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface BitScopeEdgeSubscription
-  extends Promise<AsyncIterator<BitScopeEdgeNode>>,
-    Fragmentable {
-  node: <T = BitScopeSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface SettingEdgeNode {
-  cursor: String;
-}
-
-export interface SettingEdge extends Promise<SettingEdgeNode>, Fragmentable {
-  node: <T = Setting>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface SettingEdgeSubscription
-  extends Promise<AsyncIterator<SettingEdgeNode>>,
-    Fragmentable {
-  node: <T = SettingSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateBitNode {
-  count: Int;
-}
-
-export interface AggregateBit extends Promise<AggregateBitNode>, Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateBitSubscription
-  extends Promise<AsyncIterator<AggregateBitNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BitExportConnectionNode {}
-
-export interface BitExportConnection
-  extends Promise<BitExportConnectionNode>,
+export interface SettingConnection
+  extends Promise<SettingConnectionNode>,
     Fragmentable {
   pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<BitExportEdgeNode>>() => T;
-  aggregate: <T = AggregateBitExport>() => T;
+  edges: <T = FragmentableArray<SettingEdgeNode>>() => T;
+  aggregate: <T = AggregateSetting>() => T;
 }
 
-export interface BitExportConnectionSubscription
-  extends Promise<AsyncIterator<BitExportConnectionNode>>,
+export interface SettingConnectionSubscription
+  extends Promise<AsyncIterator<SettingConnectionNode>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BitExportEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBitExportSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SettingEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSettingSubscription>() => T;
 }
 
-export interface AggregateBitExportNode {
+export interface AggregateSettingNode {
   count: Int;
 }
 
-export interface AggregateBitExport
-  extends Promise<AggregateBitExportNode>,
+export interface AggregateSetting
+  extends Promise<AggregateSettingNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateBitExportSubscription
-  extends Promise<AsyncIterator<AggregateBitExportNode>>,
+export interface AggregateSettingSubscription
+  extends Promise<AsyncIterator<AggregateSettingNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
+
+export interface BitScopeConnectionNode {}
+
+export interface BitScopeConnection
+  extends Promise<BitScopeConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<BitScopeEdgeNode>>() => T;
+  aggregate: <T = AggregateBitScope>() => T;
+}
+
+export interface BitScopeConnectionSubscription
+  extends Promise<AsyncIterator<BitScopeConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<BitScopeEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateBitScopeSubscription>() => T;
+}
+
+export interface AggregateBitScopeNode {
+  count: Int;
+}
+
+export interface AggregateBitScope
+  extends Promise<AggregateBitScopeNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateBitScopeSubscription
+  extends Promise<AsyncIterator<AggregateBitScopeNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -2035,11 +1783,6 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 export type Long = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.

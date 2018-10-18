@@ -11,7 +11,6 @@ import { makePathName } from '../helpers/make-path-name'
 
 import { pathExists } from 'fs-extra'
 import { initScope as bitScopeInit } from 'bit-bin/dist/api/scope'
-import { asyncForEach } from '../helpers/async-for-each'
 
 const { BIT_HOME } = process.env
 
@@ -33,19 +32,11 @@ export default {
       let bitScope = null
 
       try {
-        bitScope = await ctx.db.bitScope(args.where).bits()
+        bitScope = await ctx.db.bitScope(args.where)
 
         if (!bitScope) {
           throw new Error('Unable to find scope')
         }
-
-        bitScope.bitCount = await ctx.db.bitsConnection({
-          where: {
-            scope: {
-              id: bitScope.id
-            }
-          }
-        }).aggregate().count()
       } catch (e) {
         console.error(e)
         throw new Error('Unable to find scope')
@@ -60,18 +51,6 @@ export default {
 
       try {
         bitScopes = await ctx.db.bitScopes(args)
-
-        await asyncForEach<BitScopeNode>(bitScopes, async (scope) => {
-          const bitCount = await ctx.db.bitsConnection({
-            where: {
-              scope: {
-                id: scope.id
-              }
-            }
-          }).aggregate().count()
-
-          scope.bitCount = bitCount
-        })
       } catch (e) {
         console.error(e)
         throw new Error('Unable to create scope')

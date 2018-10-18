@@ -1,36 +1,30 @@
 type Bit {
   bindingPrefix: String
-  box: String!
-  compiler: String
+  box: String
   createdAt: DateTime!
+  compiler: String
   dependencies: Json
   deprecated: Boolean @default(value: false)
+  devDependencies: Json
   devPackageDependencies: Json
   dists: Json
   docs: Json
-  envsPackageDepedencies: Json
+  envsPackageDependencies: Json
   files: Json
+  hasStorybook: Boolean @default(value: false)
   id: ID! @unique
   lang: String
   license: String
   log: Json
   mainFile: String
-  name: String!
+  name: String
   packageDependencies: Json
-  peerPackageDepedencies: Json
+  peerPackageDependencies: Json
   scope: BitScope! @relation(name: "BitScopeBits")
   specsResults: Json
   tester: String
   updatedAt: DateTime!
-  version: String!
-}
-
-type BitExport {
-  bit: Bit! @relation(name: "BitExports")
-  createdAt: DateTime!
-  id: ID! @unique
-  isComplete: Boolean! @default(value: false)
-  updatedAt: DateTime!
+  version: String
 }
 
 type BitScope {

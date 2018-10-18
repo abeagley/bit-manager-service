@@ -1,4 +1,4 @@
-# import Bit, BitOrderByInput, BitWhereInput, BitWhereUniqueInput from '../generated/prisma/datamodel.graphql'
+# import Bit, BitWhereInput, BitCreateInput, BitOrderByInput from '../generated/prisma/datamodel.graphql'
 # import BitScopeOrderByInput, BitScopeWhereInput, BitScopeWhereUniqueInput from '../generated/prisma/datamodel.graphql'
 # import UserOrderByInput, UserRole, UserWhereInput, UserWhereUniqueInput from '../generated/prisma/datamodel.graphql'
 # import SettingCreateInput from '../generated/prisma/datamodel.graphql'
@@ -6,8 +6,8 @@
 # import InstallCreateInput, SanityCheck from './install.graphql'
 # import ApiUser, ApiUserCreateInput, ApiUserLoginInput, ApiUserLogin from './user.graphql'
 # import BitScope, BitScopeCreateInput from './bit-scope.graphql'
+# import BitWhereUniqueInput from './bit.graphql'
 # import Setting from './settings.graphql'
-# import BitExportHook, BitExportHookCreateInput from './hooks.graphql'
 
 type Query {
   bit (where: BitWhereUniqueInput!): Bit
@@ -24,8 +24,6 @@ type Mutation {
   createBitScope (data: BitScopeCreateInput!): BitScope
   createSettings (data: SettingCreateInput!): Setting
   createUser (data: ApiUserCreateInput!): ApiUser
-  hookBitExportPre(data: BitExportHookCreateInput!): BitExportHook
-  hookBitExportPost(data: BitExportHookCreateInput!): BitExportHook
   install (data: InstallCreateInput!): Setting
   login (data: ApiUserLoginInput!): ApiUserLogin!
 }
